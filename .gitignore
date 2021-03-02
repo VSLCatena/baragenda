@@ -16,3 +16,4 @@ service-account-credentials.json
 .idea/
 New folder
 .vscode
+*.phar
