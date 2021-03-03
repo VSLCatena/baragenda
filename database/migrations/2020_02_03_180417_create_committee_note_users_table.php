@@ -37,6 +37,7 @@ class CreateCommitteeNoteUsersTable extends Migration
      */
     public function down()
     {
+        Schema::disableForeignKeyConstraints();
         Schema::dropIfExists('committee_note_users');
     }
 }

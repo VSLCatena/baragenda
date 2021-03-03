@@ -39,6 +39,7 @@ class CreateShiftTypesTable extends Migration
      */
     public function down()
     {
+        Schema::disableForeignKeyConstraints();
         Schema::dropIfExists('shift_types');
     }
 }
