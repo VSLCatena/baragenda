@@ -31,6 +31,7 @@ class CreateShiftUsersTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('shift_users');
+        Schema::disableForeignKeyConstraints();
+        Schema::dropIfExists('shift_user');
     }
 }
