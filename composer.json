@@ -15,9 +15,10 @@
         "google/apiclient": "^2.9",
         "laravel/framework": "^8.0",
         "laravel/tinker": "^2.0",
-        "nesbot/carbon": "^2.45.1",
         "laravel/ui": "^3.0",
-        "rlanvin/php-rrule": "^2.2"
+        "nesbot/carbon": "^2.45.1",
+        "rlanvin/php-rrule": "^2.2",
+        "spatie/laravel-google-calendar": "^3.2"
     },
     "require-dev": {
         "facade/ignition": "^2.5.14",
