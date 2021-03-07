@@ -19,7 +19,10 @@ class DatabaseSeeder extends Seeder
         DB::table('users')->insert([
             'username' => 'test'
         ]);
-
+        DB::table('users')->insert([
+            'username' => 'google',
+            'id'       => '900913'
+        ]);
         DB::table('infos')->insert([
             'id' => 1,
             'user_id' => 1,
@@ -30,7 +33,7 @@ class DatabaseSeeder extends Seeder
             'email' => 'netcie@email.tld',
             'admin' => 1
         ]);
-
+        
         DB::table('infos')->insert([
             'id' => 2,
             'user_id' => 2,
@@ -40,8 +43,18 @@ class DatabaseSeeder extends Seeder
             'name' => 'test',
             'email' => 'test@email.tld',
             'admin' => 0
-        ]);
-
+            ]);
+            
+            DB::table('infos')->insert([
+                'id' => 3,
+                'user_id' => 900913,
+                'objectGUID' => '900913',
+                'lidnummer' => '900913',
+                'relatienummer' => '900913',
+                'name' => 'GoogleSync',
+                'email' => '',
+                'admin' => 0
+            ]);
         DB::table('committees')->insert([
             'name' => 'barco',
             'objectGUID' => '46541144'
