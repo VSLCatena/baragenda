@@ -15,8 +15,15 @@ class CreateLocationsTable extends Migration
     {
         Schema::create('locations', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('resource_id'); //external resource reference in Gsuite
             $table->string('name');
+            $table->bigInteger('resource_id'); //external resource reference in Gsuite
+            $table->string('generatedname');
+            $table->integer('capacity')->nullable();
+            $table->string('floorname')->nullable();
+            $table->string('floorsection')->nullable();
+            $table->json('features')->nullable();
+            $table->string('email');
+            
             $table->timestamps();
         });
     }

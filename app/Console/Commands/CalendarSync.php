@@ -3,7 +3,9 @@
 namespace App\Console\Commands;
 
 use Spatie\GoogleCalendar\Event as GEvent;
+use Spatie\GoogleCalendar\Resource;
 use App\Models\Event as LEvent;
+use App\Models\Location;
 use Carbon\Carbon;
 use Illuminate\Console\Command;
 
@@ -107,6 +109,24 @@ class CalendarSync extends Command
                 $event->save();
             });
         } 
+
+        $Resources = Resource::get();
+        foreach($Resources as $item) {
+            $location = Location::create([
+                'name'          => $item['name'], 
+                'resource_id'   => $item['id'], 
+                'generatedname' => $item['generatedname'], 
+                'capacity'      => $item['capacity'],
+                'floorname'     => $item['floorname'], 
+                'floorsection'  => $item['floorsection'],  
+                'features'      => json_encode($item['features']), 
+                'email'         => $item['email'], 
+
+            ]);
+            $location->save();
+        }
+
+
         return 0;
     }
 }
