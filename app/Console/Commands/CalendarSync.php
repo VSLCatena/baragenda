@@ -112,9 +112,10 @@ class CalendarSync extends Command
 
         $Resources = Resource::get();
         foreach($Resources as $item) {
-            $location = Location::create([
+            $location = Location::updateOrCreate(
+                ['resource_id'   => $item['id']],
+                [ 
                 'name'          => $item['name'], 
-                'resource_id'   => $item['id'], 
                 'generatedname' => $item['generatedname'], 
                 'capacity'      => $item['capacity'],
                 'floorname'     => $item['floorname'], 
@@ -123,7 +124,6 @@ class CalendarSync extends Command
                 'email'         => $item['email'], 
 
             ]);
-            $location->save();
         }
 
 
