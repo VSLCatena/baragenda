@@ -98,7 +98,7 @@ class CalendarSync extends Command
                     'recurring_end'         =>  null,
                     'rrule'                 =>  $item->recurringEventId ? GEvent::find($item->recurringEventId,env('GOOGLE_CALENDAR_ID_PUBLIC'))->recurrence[0] : null,
                     'all_day'               =>  $item->isAllDayEvent(),
-                    'location_id'           =>  $item->attendees,
+                    'location_id'           =>  null,
                     'committee_id'          =>  null,
                     'attendees'             =>  json_encode($item->attendees),
                     'status'                => 'published',
