@@ -7,6 +7,7 @@ use Spatie\GoogleCalendar\Resource;
 use App\Models\Event as LEvent;
 use App\Models\Location;
 use Carbon\Carbon;
+use RRule\RRule;
 use Illuminate\Console\Command;
 
 class CalendarSync extends Command
@@ -86,6 +87,7 @@ class CalendarSync extends Command
         # if only id remote 
         if($id_right->count() > 0){
             $id_right->each(function ($item, $key) {
+
                 $event = LEvent::create([
 
                     'title'                 =>  $item->summary,
@@ -94,9 +96,9 @@ class CalendarSync extends Command
                     'datetime_end'          =>  Carbon::parse($item->endDateTime)->format('Y-m-d H:i:s'),
                     'recurring_start'       =>  null,
                     'recurring_end'         =>  null,
-                    'rrule'                 =>  null,
+                    'rrule'                 =>  $item->recurringEventId ? GEvent::find($item->recurringEventId,env('GOOGLE_CALENDAR_ID_PUBLIC'))->recurrence[0] : null,
                     'all_day'               =>  $item->isAllDayEvent(),
-                    'location_id'           =>  null,
+                    'location_id'           =>  $item->attendees,
                     'committee_id'          =>  null,
                     'attendees'             =>  json_encode($item->attendees),
                     'status'                => 'published',
