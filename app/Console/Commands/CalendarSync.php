@@ -51,7 +51,7 @@ class CalendarSync extends Command
         $events_local = LEvent::whereBetween('datetime_start', [Carbon::today()->startOfDay(), Carbon::today()->addMonths(1)])->get();
         if(!($events_local->isEmpty())){
             $id_local = $events_local->mapWithKeys(function ($item) {
-                return  array($item->id=>$item);
+                return  array($item->google_event_id=>$item);
             });
         } else{ $id_local=collect(); }
 
