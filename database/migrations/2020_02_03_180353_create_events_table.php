@@ -24,7 +24,7 @@ class CreateEventsTable extends Migration
             $table->dateTime('recurring_end')->nullable();
 			$table->string('rrule')->nullable();
             $table->boolean('all_day')->default(false);
-            $table->integer('location_id')->unsigned()->nullable();
+            $table->string('location')->nullable();
             $table->integer('committee_id')->unsigned()->nullable();
 			$table->json('attendees')->nullable();
 			$table->enum('status',['draft','published','deleted']); //draft published or deleted

@@ -76,29 +76,41 @@ class CalendarSync extends Command
             #   if local is newer-> sync to google (update publish)
             # delete if delete 
             #   if remote is newer-> do nothing???
+                if($item->updated_at > $item->google_updated) {
+                    if($item->status != 'publish') {
+                    #delete remote
+                    }
+                    else {
+                    #update event
+                    }
+                }
+            
             });
             # if only id local
         }
         if($id_left->count() > 0){
             $id_left->each(function ($item, $key) {
             #   create (if not delete)
+                if($item.status == 'publish'){
+                  #create
+                }
             });
         }
         # if only id remote 
         if($id_right->count() > 0){
             $id_right->each(function ($item, $key) {
-
+               #sync to local
                 $event = LEvent::create([
 
                     'title'                 =>  $item->summary,
                     'description'           =>  $item->description,
                     'datetime_start'        =>  Carbon::parse($item->startDateTime)->format('Y-m-d H:i:s'),
                     'datetime_end'          =>  Carbon::parse($item->endDateTime)->format('Y-m-d H:i:s'),
-                    'recurring_start'       =>  null,
-                    'recurring_end'         =>  null,
+                    'recurring_start'       =>  null, #for parent
+                    'recurring_end'         =>  null,  #for parent
                     'rrule'                 =>  $item->recurringEventId ? GEvent::find($item->recurringEventId,env('GOOGLE_CALENDAR_ID_PUBLIC'))->recurrence[0] : null,
                     'all_day'               =>  $item->isAllDayEvent(),
-                    'location_id'           =>  null,
+                    'location'           =>  null, #$item.atrendees.email in location.email ? location.id : item.loctionid
                     'committee_id'          =>  null,
                     'attendees'             =>  json_encode($item->attendees),
                     'status'                => 'published',
