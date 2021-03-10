@@ -45,7 +45,9 @@ class CalendarSync extends Command
     {
 
 
-        #id & timestamp
+        ##
+        ## Sync using ID and update timestamp
+        ##
        
         #get local $array1 = array("green", "red", "blue");
         $events_local = LEvent::whereBetween('datetime_start', [Carbon::today()->startOfDay(), Carbon::today()->addMonths(1)])->get();
@@ -60,34 +62,42 @@ class CalendarSync extends Command
         $id_remote = $events_remote->mapWithKeys(function ($item) {
             return  array($item->id=>$item);
         });
-        #print_r($events_remote->take(3));
-        #print_r($id_remote->all());
-        #print_r($events_remote->first());
-        
+
+        #do diff/intersect on all datasets
         $id_left=$id_local->diffKeys($id_remote); #$id_left=array_values(array_diff($id_local,$id_remote)); #$array("blue"); 
         $id_intersect=$id_local->intersectByKeys($id_remote); #$id_intersect=array_values(array_intersect($id_local,$id_remote)) # intersect $array("green",  "red"); 
         $id_right=$id_remote->diffKeys($id_local); #$id_right=array_values(array_diff($id_remote,$id_local));  #$array("yellow");
-        #print_r($id_left);
- 
-        # if id remote==id local
+
+        #
+        # Event exist in local db and online | if id remote==id local
+        #
         if($id_intersect->count() > 0){
             $id_intersect->each(function ($item, $key) {
-            #   check timestamp
-            #   if local is newer-> sync to google (update publish)
-            # delete if delete 
-            #   if remote is newer-> do nothing???
+                #
+                #   Check timestamp | if local is newer-> sync to google (update publish remoteley)
+                # 
                 if($item->updated_at > $item->google_updated) {
                     if($item->status != 'publish') {
-                    #delete remote
+                        #GEvent::find($item->id,env('GOOGLE_CALENDAR_ID_PUBLIC'))->delete(); Deletes event from Calendar
                     }
+                    #
+                    #  sync to google (delete remotelely)
+                    # 
                     else {
-                    #update event
+                        // $event = Event::find($item->google_event_id);
+                        // $event->name = $item->title;
+                        // $event->save();
                     }
+                }
+                else {
+                    # This means that the event has been updated outside of this locall application... this should perhaps update the local db
                 }
             
             });
-            # if only id local
         }
+        #
+        # Event exist in local db only | if id local does not exist remotely
+        #
         if($id_left->count() > 0){
             $id_left->each(function ($item, $key) {
             #   create (if not delete)
@@ -96,7 +106,9 @@ class CalendarSync extends Command
                 }
             });
         }
-        # if only id remote 
+        #
+        # Event exist in Remote only| only if made online / app and has not synced with local db
+        #
         if($id_right->count() > 0){
             $id_right->each(function ($item, $key) {
                #sync to local
@@ -110,7 +122,7 @@ class CalendarSync extends Command
                     'recurring_end'         =>  null,  #for parent
                     'rrule'                 =>  $item->recurringEventId ? GEvent::find($item->recurringEventId,env('GOOGLE_CALENDAR_ID_PUBLIC'))->recurrence[0] : null,
                     'all_day'               =>  $item->isAllDayEvent(),
-                    'location'           =>  null, #$item.atrendees.email in location.email ? location.id : item.loctionid
+                    'location'              =>  $item->location, #$item.atrendees.email in location.email ? location.id : item.loctionid
                     'committee_id'          =>  null,
                     'attendees'             =>  json_encode($item->attendees),
                     'status'                => 'published',
