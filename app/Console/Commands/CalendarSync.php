@@ -130,6 +130,16 @@ class CalendarSync extends Command
                     'google_event_id'       =>  $item->id,
                     'google_parent_event_id'=>  $item->recurringEventId,
                     'google_updated'        =>  Carbon::parse($item->updated)->format('Y-m-d H:i:s'),
+                    'google_created'        =>  Carbon::parse($item->created)->format('Y-m-d H:i:s'),
+                    'guests_caninviteothers'=>  $item->guestsCanInviteOthers ? True : False,
+                    'guests_canmodify'      =>  $item->guestsCanModify ? True : False,
+                    'guests_canseeotherguests'=> $item->guestsCanSeeOtherGuests ? True : False,
+                    'organizer_displayname' => $item->organizer->displayName,
+                    'creator_displayname'   =>  $item->creator->displayName,
+                    'organizer_email'       =>  $item->organizer->email,
+                    'creator_email'         => $item->creator->email,
+                    'htmllink'              => json_encode($item->conferenceData->entryPoints),
+                    'meetdata'              => $item->
                     'updated_by'            =>  900913,
                 ]);
                 $event->save();
