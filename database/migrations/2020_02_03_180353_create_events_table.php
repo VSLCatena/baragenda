@@ -48,7 +48,6 @@ class CreateEventsTable extends Migration
 
 			#foreign references
 			$table->foreign('shift_id')->references('id')->on('shifts');
-			$table->foreign('location_id')->references('id')->on('locations');
 			$table->foreign('committee_id')->references('id')->on('committees');
 			$table->foreign('updated_by')->references('id')->on('users');
         });
