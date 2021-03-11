@@ -138,8 +138,8 @@ class CalendarSync extends Command
                     'creator_displayname'   =>  $item->creator->displayName,
                     'organizer_email'       =>  $item->organizer->email,
                     'creator_email'         => $item->creator->email,
-                    'htmllink'              => json_encode($item->conferenceData->entryPoints),
-                    'meetdata'              => $item->
+                    'htmllink'              => $item->htmlLink,
+                    'meetdata'              => json_encode($item->conferenceData->entryPoints),
                     'updated_by'            =>  900913,
                 ]);
                 $event->save();
