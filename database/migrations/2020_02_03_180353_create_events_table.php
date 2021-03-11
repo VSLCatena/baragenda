@@ -27,11 +27,22 @@ class CreateEventsTable extends Migration
             $table->string('location')->nullable();
             $table->integer('committee_id')->unsigned()->nullable();
 			$table->json('attendees')->nullable();
+			$table->json('entryPoints')->nullable(); //Google Meet
 			$table->enum('status',['draft','published','deleted']); //draft published or deleted
             $table->string('google_calendar_id'); //external calendar
             $table->string('google_event_id'); //external event
-            $table->string('google_parent_event_id')->nullable(); //external event
-            $table->dateTime('google_updated'); //external event
+            $table->string('google_parent_event_id')->nullable();
+            $table->dateTime('google_updated'); 
+            $table->dateTime('google_created'); 
+            $table->boolean('guests_caninviteothers')->default(false);
+            $table->boolean('guests_canmodify')->default(false);
+            $table->boolean('guests_canseeotherguests')->default(false);
+            $table->string('organizer_displayname')->nullable();
+            $table->string('creator_displayname')->nullable();
+            $table->string('organizer_email')->nullable();
+            $table->string('creator_email')->nullable();
+            $table->string('htmllink'); 
+
             $table->integer('updated_by')->unsigned();
             $table->timestamps();
 
