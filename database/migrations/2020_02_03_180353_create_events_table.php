@@ -15,7 +15,6 @@ class CreateEventsTable extends Migration
     {
         Schema::create('events', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('shift_id')->unsigned()->nullable(); //either shift or reservations
             $table->string('title');
             $table->text('description')->nullable();
             $table->dateTime('datetime_start');
@@ -25,15 +24,14 @@ class CreateEventsTable extends Migration
 			$table->string('rrule')->nullable();
             $table->boolean('all_day')->default(false);
             $table->string('location')->nullable();
-            $table->integer('committee_id')->unsigned()->nullable();
 			$table->json('attendees')->nullable();
-			$table->json('entryPoints')->nullable(); //Google Meet
+			$table->json('entrypoints')->nullable(); //Google Meet
 			$table->enum('status',['draft','published','deleted']); //draft published or deleted
             $table->string('google_calendar_id'); //external calendar
             $table->string('google_event_id'); //external event
             $table->string('google_parent_event_id')->nullable();
-            $table->dateTime('google_updated'); 
-            $table->dateTime('google_created'); 
+            $table->dateTime('google_updated')->nullable(); 
+            $table->dateTime('google_created')->nullable(); 
             $table->boolean('guests_caninviteothers')->default(false);
             $table->boolean('guests_canmodify')->default(false);
             $table->boolean('guests_canseeotherguests')->default(false);
@@ -41,11 +39,14 @@ class CreateEventsTable extends Migration
             $table->string('creator_displayname')->nullable();
             $table->string('organizer_email')->nullable();
             $table->string('creator_email')->nullable();
-            $table->string('htmllink'); 
-
+            $table->string('htmllink',255)->nullable(); 
+            
+            $table->integer('committee_id')->unsigned()->nullable();
+            $table->integer('shift_id')->unsigned()->nullable(); //either shift or reservations
+            
             $table->integer('updated_by')->unsigned();
             $table->timestamps();
-
+            
 			#foreign references
 			$table->foreign('shift_id')->references('id')->on('shifts');
 			$table->foreign('committee_id')->references('id')->on('committees');

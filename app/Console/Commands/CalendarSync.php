@@ -101,7 +101,7 @@ class CalendarSync extends Command
         if($id_left->count() > 0){
             $id_left->each(function ($item, $key) {
             #   create (if not delete)
-                if($item.status == 'publish'){
+                if($item->status == 'publish'){
                   #create
                 }
             });
@@ -112,6 +112,11 @@ class CalendarSync extends Command
         if($id_right->count() > 0){
             $id_right->each(function ($item, $key) {
                #sync to local
+
+               #DEBUG
+                    if($item->summary == "TEST"){ 
+                        $this->info(print_r($item));
+                    }
                 $event = LEvent::create([
 
                     'title'                 =>  $item->summary,
@@ -123,10 +128,10 @@ class CalendarSync extends Command
                     'rrule'                 =>  $item->recurringEventId ? GEvent::find($item->recurringEventId,env('GOOGLE_CALENDAR_ID_PUBLIC'))->recurrence[0] : null,
                     'all_day'               =>  $item->isAllDayEvent(),
                     'location'              =>  $item->location, #$item.atrendees.email in location.email ? location.id : item.loctionid
-                    'committee_id'          =>  null,
                     'attendees'             =>  json_encode($item->attendees),
+                    'entrypoints'           =>  json_encode($item->conferenceData['entryPoints']) ,
                     'status'                => 'published',
-                    'google_calendar_id'    =>  env('GOOGLE_CALENDAR_ID_PUBLIC'), #$item->getCalendarId(),
+                    'google_calendar_id'    =>  env('GOOGLE_CALENDAR_ID_PRIVATE'), #$item->getCalendarId(),
                     'google_event_id'       =>  $item->id,
                     'google_parent_event_id'=>  $item->recurringEventId,
                     'google_updated'        =>  Carbon::parse($item->updated)->format('Y-m-d H:i:s'),
@@ -139,25 +144,25 @@ class CalendarSync extends Command
                     'organizer_email'       =>  $item->organizer->email,
                     'creator_email'         => $item->creator->email,
                     'htmllink'              => $item->htmlLink,
-                    'meetdata'              => json_encode($item->conferenceData->entryPoints),
                     'updated_by'            =>  900913,
+                    'committee_id'          =>  null,
                 ]);
                 $event->save();
             });
         } 
 
         $Resources = Resource::get();
-        foreach($Resources as $item) {
+        foreach($Resources as $ResourceItem) {
             $location = Location::updateOrCreate(
-                ['resource_id'   => $item['id']],
+                ['resource_id'   => $ResourceItem['id']],
                 [ 
-                'name'          => $item['name'], 
-                'generatedname' => $item['generatedname'], 
-                'capacity'      => $item['capacity'],
-                'floorname'     => $item['floorname'], 
-                'floorsection'  => $item['floorsection'],  
-                'features'      => json_encode($item['features']), 
-                'email'         => $item['email'], 
+                'name'          => $ResourceItem['name'], 
+                'generatedname' => $ResourceItem['generatedname'], 
+                'capacity'      => $ResourceItem['capacity'],
+                'floorname'     => $ResourceItem['floorname'], 
+                'floorsection'  => $ResourceItem['floorsection'],  
+                'features'      => json_encode($ResourceItem['features']), 
+                'email'         => $ResourceItem['email'], 
 
             ]);
         }
