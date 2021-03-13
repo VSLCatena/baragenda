@@ -3,8 +3,8 @@
 namespace App\Http\Controllers;
 
 use Google_Service_Calendar_EventCreator;
-use App\Helpers\GSCalendar\Event;
-use App\Helpers\GSCalendar\Resource;
+use App\Models\Event;
+use App\Models\Location as Resource;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 
