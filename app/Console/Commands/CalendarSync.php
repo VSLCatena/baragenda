@@ -50,7 +50,7 @@ class CalendarSync extends Command
         ##
        
         #get local $array1 = array("green", "red", "blue");
-        $events_local = LEvent::whereBetween('datetime_start', [Carbon::today()->startOfDay(), Carbon::today()->addMonths(1)])->get();
+        $events_local = LEvent::whereBetween('datetime_start', [Carbon::today()->startOfDay()->addMonths(-1), Carbon::today()->addMonths(1)])->get();
         if(!($events_local->isEmpty())){
             $id_local = $events_local->mapWithKeys(function ($item) {
                 return  array($item->google_event_id=>$item);
@@ -58,7 +58,9 @@ class CalendarSync extends Command
         } else{ $id_local=collect(); }
 
         #get remote $array2 = array("green", "yellow", "red");
-        $events_remote = GEvent::get(Carbon::today()->startOfDay(), Carbon::today()->addMonths(1));
+        $events_remote1 = GEvent::get(Carbon::today()->startOfDay()->addMonths(-1), Carbon::today()->addMonths(1),$queryParameters=array(), $calendarId=env('GOOGLE_CALENDAR_ID_PUBLIC'));
+        $events_remote2 = GEvent::get(Carbon::today()->startOfDay(), Carbon::today()->addMonths(1),$queryParameters=array(), $calendarId=env('GOOGLE_CALENDAR_ID_PRIVATE'));
+        $events_remote=$events_remote1->concat($events_remote2);
         $id_remote = $events_remote->mapWithKeys(function ($item) {
             return  array($item->id=>$item);
         });
@@ -119,19 +121,19 @@ class CalendarSync extends Command
                     }
                 $event = LEvent::create([
 
-                    'title'                 =>  $item->summary,
+                    'summary'                 =>  $item->summary,
                     'description'           =>  $item->description,
                     'datetime_start'        =>  Carbon::parse($item->startDateTime)->format('Y-m-d H:i:s'),
                     'datetime_end'          =>  Carbon::parse($item->endDateTime)->format('Y-m-d H:i:s'),
                     'recurring_start'       =>  null, #for parent
                     'recurring_end'         =>  null,  #for parent
-                    'rrule'                 =>  $item->recurringEventId ? GEvent::find($item->recurringEventId,env('GOOGLE_CALENDAR_ID_PUBLIC'))->recurrence[0] : null,
+                    'rrule'                 =>  $item->recurringEventId ? GEvent::find($item->recurringEventId,$item->getCalendarId())->recurrence[0] : null,
                     'all_day'               =>  $item->isAllDayEvent(),
                     'location'              =>  $item->location, #$item.atrendees.email in location.email ? location.id : item.loctionid
                     'attendees'             =>  json_encode($item->attendees),
                     'entrypoints'           =>  json_encode($item->conferenceData['entryPoints']) ,
                     'status'                => 'published',
-                    'google_calendar_id'    =>  env('GOOGLE_CALENDAR_ID_PRIVATE'), #$item->getCalendarId(),
+                    'google_calendar_id'    =>  $item->getCalendarId(), #$item->getCalendarId(),
                     'google_event_id'       =>  $item->id,
                     'google_parent_event_id'=>  $item->recurringEventId,
                     'google_updated'        =>  Carbon::parse($item->updated)->format('Y-m-d H:i:s'),
