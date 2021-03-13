@@ -1,7 +1,6 @@
 name: Laravel
 
 on:
-  push: [ dev ]
   pull_request: [ dev ]
 
 jobs:
