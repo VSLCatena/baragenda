@@ -74,7 +74,7 @@ class AgendaController extends Controller
     }
 
 
-    private function getOverlapDateRanges(Carbon $start1,Carbon $end1,Carbon $start2,Carbon $end2,String $format="Ymd",array $array=array(),bool $complex=$false){
+    private function getOverlapDateRanges(Carbon $start1,Carbon $end1,Carbon $start2,Carbon $end2,String $format="Ymd",array $array=array(),bool $complex=false){
         $period = CarbonPeriod::between($start1,$end1);
         $period2 = CarbonPeriod::between($start2,$end2);
          $filter = function ($date) use($period2) {
