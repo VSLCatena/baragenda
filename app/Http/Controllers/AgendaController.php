@@ -36,7 +36,9 @@ class AgendaController extends Controller
 	 */
 	private function generateDateRange(Carbon $start_date, Carbon $end_date, $firstday=false,$prepArray=false,$prepArrayFormat='Ymd',$nameArray='events')
 	{
-        
+        #
+        # Start using     $period = CarbonPeriod::between($start1,$end1);
+        #
 
         //range starting from first day of that week till last day of that week
 		if($firstday){
@@ -71,6 +73,29 @@ class AgendaController extends Controller
             return $eventFormat;
     }
 
+
+    private function getOverlapDateRanges(Carbon $start1,Carbon $end1,Carbon $start2,Carbon $end2,String $format="Ymd",array $array=array(),bool $complex=$false){
+        $period = CarbonPeriod::between($start1,$end1);
+        $period2 = CarbonPeriod::between($start2,$end2);
+         $filter = function ($date) use($period2) {
+             return $period2->contains($date);
+         };
+         $period->filter($filter);
+         $range = array();
+         foreach ($period as $date) {
+             if($complex){
+               $range[$date->format($format)]=array_merge(['carbon'=>$date],$array);
+             }
+             else {
+                 $range[]=$date;
+             }
+         }
+         return ($range);
+         
+     
+     
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -98,6 +123,8 @@ class AgendaController extends Controller
     {
         $dates=$this->generateDateRange($start,$end,true,true); // give me an array of dates!!!!
         $events =  Event::whereBetween('datetime_start', [$start, $end])->orWhereBetween('datetime_end',[$start,$end])->get(); //retrieve all values 
+        $eventsRange =  Event::whereNotNull('date_start')->whereNotNull('date_end')->get(); //retrieve all values
+        $events = $events->concat($eventsRange); 
         $merged = $this->mergeEventsDateRange($events,$dates);
         #echo("<pre>");print_r($merged);die;
         return $merged;
@@ -115,8 +142,16 @@ class AgendaController extends Controller
     {   
         $events->each(function ($e) use(&$dates) {
             $source = $e->google_calendar_id == env('GOOGLE_CALENDAR_ID_PRIVATE') ? env('GSUITE_CAL_PRIV_SUMM_DISPLAY') : env('GSUITE_CAL_PUBL_SUMM_DISPLAY');
-            $shape=$this->calculateShape($e->datetime_start,$e->datetime_end);
-            $dates[$e->datetime_start->format('Ymd')]['events'][]=array('source'=>$source,'shape'=>$shape,'object'=>$e);
+            if($e->date_end == null){ 
+                $shape=$this->calculateShape($e->datetime_start,$e->datetime_end);
+                $dates[$e->datetime_start->format('Ymd')]['events'][]=array('source'=>$source,'shape'=>$shape,'object'=>$e);
+            } else {
+                $shape=$this->calculateShape($e->date_start,$e->date_end) ;
+
+                #$dates[$e->date_start->format('Ymd')]['events'][]=array('source'=>$source,'shape'=>$shape,'object'=>$e);
+            } 
+           
+           echo("<pre>");print_r($e->summary);echo("<br>");print_r($e->date_start);print_r($e->date_end);print_r($shape);echo("</pre>");
         });
     
             // //if startdate is IN this period
@@ -209,7 +244,7 @@ class AgendaController extends Controller
             // $eventsArray[$carbon->format('Ymd')][]=$eventFormat;
 
         
-        #echo("<pre>");print_r($event);die;
+        
         return $dates;
     }
     //function should send less data (this function is for Ajax Post requests) , might be replaced with PHP version of index
