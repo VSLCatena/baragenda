@@ -58,9 +58,21 @@ class CalendarSync extends Command
         } else{ $id_local=collect(); }
 
         #get remote $array2 = array("green", "yellow", "red");
-        $events_remote1 = GEvent::get(Carbon::today()->startOfDay()->addMonths(-1), Carbon::today()->addMonths(1),$queryParameters=array(), $calendarId=env('GOOGLE_CALENDAR_ID_PUBLIC'));
-        $events_remote2 = GEvent::get(Carbon::today()->startOfDay(), Carbon::today()->addMonths(1),$queryParameters=array(), $calendarId=env('GOOGLE_CALENDAR_ID_PRIVATE'));
-        $events_remote=$events_remote1->concat($events_remote2);
+        $events_remote1 = GEvent::get(Carbon::today()->startOfDay()->addMonths(-1), Carbon::today()->addMonths(1),array(),  env('GOOGLE_CALENDAR_ID_PUBLIC')); #public calendar
+        $events_remote2 = GEvent::get(Carbon::today()->startOfDay(), Carbon::today()->addMonths(1),array(),  env('GOOGLE_CALENDAR_ID_PRIVATE')); #private calendar
+        $events_remote=$events_remote1->concat($events_remote2); #combine the collections
+
+        $events_remoteParent = $events_remote2->map(function ($ev, $key) {
+            if($ev->recurringEventId != null){
+                return GEvent::find($ev->recurringEventId,$ev->getCalendarId());
+            }
+            
+        });
+        $events_remoteParent=$events_remoteParent->unique()->whereNotNull()->values();     #get all parent events 
+        $events_remote=$events_remoteParent->concat($events_remote); #combine the collections
+
+        #print_r($events_remoteParent);die;
+        
         $id_remote = $events_remote->mapWithKeys(function ($item) {
             return  array($item->id=>$item);
         });
@@ -116,24 +128,27 @@ class CalendarSync extends Command
                #sync to local
 
                #DEBUG
-                    if($item->summary == "TEST"){ 
-                        $this->info(print_r($item));
+                    if($item->summary=="Open Week"){ 
+                        try {
+                            #$this->info(print_r($item));
+                        }
+                        catch (Exception $e) {}
                     }
                 $event = LEvent::create([
 
-                    'summary'                 =>  $item->summary,
+                    'summary'               =>  $item->summary,
                     'description'           =>  $item->description,
-                    'datetime_start'        =>  Carbon::parse($item->startDateTime)->format('Y-m-d H:i:s'),
-                    'datetime_end'          =>  Carbon::parse($item->endDateTime)->format('Y-m-d H:i:s'),
+                    'datetime_start'        =>  Carbon::parse($item->startDateTime)->format('Y-m-d H:i:s') ?? Carbon::parse($item->startDate)->format('Y-m-d'),
+                    'datetime_end'          =>  Carbon::parse($item->endDateTime)->format('Y-m-d H:i:s') ??  Carbon::parse($item->endDate)->format('Y-m-d'),
                     'recurring_start'       =>  null, #for parent
                     'recurring_end'         =>  null,  #for parent
-                    'rrule'                 =>  $item->recurringEventId ? GEvent::find($item->recurringEventId,$item->getCalendarId())->recurrence[0] : null,
+                    'rrule'                 =>  $item->recurrence[0] ?? null,
                     'all_day'               =>  $item->isAllDayEvent(),
                     'location'              =>  $item->location, #$item.atrendees.email in location.email ? location.id : item.loctionid
                     'attendees'             =>  json_encode($item->attendees),
                     'entrypoints'           =>  json_encode($item->conferenceData['entryPoints']) ,
                     'status'                => 'published',
-                    'google_calendar_id'    =>  $item->getCalendarId(), #$item->getCalendarId(),
+                    'google_calendar_id'    =>  $item->getCalendarId(),
                     'google_event_id'       =>  $item->id,
                     'google_parent_event_id'=>  $item->recurringEventId,
                     'google_updated'        =>  Carbon::parse($item->updated)->format('Y-m-d H:i:s'),
@@ -141,11 +156,11 @@ class CalendarSync extends Command
                     'guests_caninviteothers'=>  $item->guestsCanInviteOthers ? True : False,
                     'guests_canmodify'      =>  $item->guestsCanModify ? True : False,
                     'guests_canseeotherguests'=> $item->guestsCanSeeOtherGuests ? True : False,
-                    'organizer_displayname' => $item->organizer->displayName,
+                    'organizer_displayname' =>  $item->organizer->displayName,
                     'creator_displayname'   =>  $item->creator->displayName,
                     'organizer_email'       =>  $item->organizer->email,
-                    'creator_email'         => $item->creator->email,
-                    'htmllink'              => $item->htmlLink,
+                    'creator_email'         =>  $item->creator->email,
+                    'htmllink'              =>  $item->htmlLink,
                     'updated_by'            =>  900913,
                     'committee_id'          =>  null,
                 ]);
