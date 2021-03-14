@@ -5,6 +5,7 @@ use App\Models\Event;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use RRule\RRule;
+use Illuminate\Support\Collection;
 
 
 class AgendaController extends Controller
@@ -215,6 +216,8 @@ class AgendaController extends Controller
     public function getdate(Request $request){
         $request->validate(['s' => 'regex:/^[a-zA-Z0-9 :()+]+$/']);
         $event = Event::where('google_event_id', $request->google_event_id)->first(); //raw event
+        $event->attendees=collect(json_decode($event->attendees))->implode('displayName',',') ?? null;
+        $event->entrypoints=collect(json_decode($event->entrypoints))->first()->label ?? null;
         return response()->json(array('data'=>$event));
     }
     /**
