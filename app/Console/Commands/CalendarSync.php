@@ -128,9 +128,9 @@ class CalendarSync extends Command
                #sync to local
 
                #DEBUG
-                    if($item->summary=="Open Week"){ 
+                    if($item->summary){ 
                         try {
-                            #$this->info(print_r($item));
+                            #$this->info(print_r($item->getSortDate()));
                         }
                         catch (Exception $e) {}
                     }
@@ -138,8 +138,10 @@ class CalendarSync extends Command
 
                     'summary'               =>  $item->summary,
                     'description'           =>  $item->description,
-                    'datetime_start'        =>  Carbon::parse($item->startDateTime)->format('Y-m-d H:i:s') ?? Carbon::parse($item->startDate)->format('Y-m-d'),
-                    'datetime_end'          =>  Carbon::parse($item->endDateTime)->format('Y-m-d H:i:s') ??  Carbon::parse($item->endDate)->format('Y-m-d'),
+                    'datetime_start'        =>  $item->startDateTime ? $item->startDateTime->format('Y-m-d H:i:s') : null ,
+                    'datetime_end'          =>  $item->endDateTime ? $item->endDateTime->format('Y-m-d H:i:s') : null, 
+                    'date_start'            =>  $item->startDate ? $item->startDate->toDateString() : null ,
+                    'date_end'              =>  $item->endDate ? $item->endDate->toDateString() : null ,
                     'recurring_start'       =>  null, #for parent
                     'recurring_end'         =>  null,  #for parent
                     'rrule'                 =>  $item->recurrence[0] ?? null,

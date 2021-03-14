@@ -15,10 +15,12 @@ class CreateEventsTable extends Migration
     {
         Schema::create('events', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('title');
+            $table->string('summary');
             $table->text('description')->nullable();
-            $table->dateTime('datetime_start');
-            $table->dateTime('datetime_end');
+            $table->dateTime('datetime_start')->nullable();
+            $table->dateTime('datetime_end')->nullable();
+            $table->dateTime('date_start')->nullable();
+            $table->dateTime('date_end')->nullable();
             $table->dateTime('recurring_start')->nullable();
             $table->dateTime('recurring_end')->nullable();
 			$table->string('rrule')->nullable();
