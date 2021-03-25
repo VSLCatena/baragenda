@@ -323,7 +323,7 @@
 
 															<!-- Modal content-->
 															<div class="modal-content">
-																<div class="modal-body" style="min-height:300px;max-width: 448px;width: 448px;">
+																<div class="modal-body" style="min-height:300px;max-width: 448px;width: 448px; padding-left: 1.5rem;">
                                                                     <div class="row" style="height:136px;">
                                                                         Top image
                                                                     </div>
@@ -390,7 +390,7 @@
 																</div>
 																<div class="modal-footer">
                                                                     @admin
-                                                                        <form id="editEventForm" autocomplete="off" action="{{ route('agenda.edit') }}" method='GET' >
+                                                                        <form id="editEventForm" autocomplete="off" action="{{ route('agenda.edit') }}" style="margin-block-end: 0em;" method='GET' >
                                                                             {{ csrf_field() }}
                                                                             <input type="hidden" id="editEventId" name="eventId" value="" />
                                                                             <input type="hidden" id="editCalendarId" name="calendarNo" value="" />

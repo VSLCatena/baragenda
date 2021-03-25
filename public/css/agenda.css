@@ -483,6 +483,7 @@
     }
     .modal-dialog {
         box-shadow: 2px 2px #888888 !important;
+        border-radius: .3rem;
     }
     /*
     Google Div class transfered
