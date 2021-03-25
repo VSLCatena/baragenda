@@ -143,9 +143,9 @@
 																					top: {{$loopvar}}em;
 																					left: {{ ($event['shape']['pos_day'])*100 }}%;"
 																				class="allday-data-item border-div" >
-																				<div onclick="eventModal('{{ $event['id'] }}','{{ $event['calendarNo'] }}')" class="allday-data-item-button">
+																				<div onclick="eventModal('{{ $event['object']['google_event_id'] }}')" class="allday-data-item-button">
 																					<span class="allday-data-item-span">
-																						{{$event['summary']}}
+																						{{$event['object']['summary']}}
 																					</span>
 																				</div>
 																			</div>
@@ -297,17 +297,17 @@
 																<div id="grid_{{$i}}" class="border-div bottom-tabs-gridcell" style="position:relative">
 																	@foreach($date['events'] as $j => $event)
 																		@if($event['shape']['size']<1)
-																			<div onclick="eventModal('{{ $event['id'] }}','{{ $event['calendarNo'] }}')" class="{{ $event['calendar']==1 ? 'event-button' : 'event-button2'}}"
+																			<div onclick="eventModal('{{ $event['object']['google_event_id'] }}')" class="{{ $event['source']='Interne Agenda' ? 'event-button' : 'event-button2'}}"
 																			style="z-index: {{$j+15}};top:
 																				@if($event['shape']['pos']<=0.5) {{20/720*24*$event['shape']['pos'] *100}}% {{--20=time;720=total--}}
 																				@else {{((40/720)*(24*($event['shape']['pos']-0.5))+(0.5*24*(20/720))) * 100}}% {{--20&40=time;720=total--}}
 																				@endif; height:{{$event['shape']['size']*720}}px;">
 																				<div class="event-button-data">
 																					<div class="event-button-title">
-																						{{ $event['summary']   }}
+																						{{ $event['object']['summary']   }}
 																					</div>
 																					<div class="event-button-time">
-																						{{ $event['start']['carbon']->translatedFormat('H:i') }}-{{ $event['end']['carbon']->translatedFormat('H:i') }}
+																						{{ $event['object']['datetime_start']->translatedFormat('H:i') }}-{{ $event['object']['datetime_end']->translatedFormat('H:i') }}
 																					</div>
 																				</div>
 																			</div>
@@ -369,6 +369,14 @@
                                                                                     <p id="md_description"></p>
                                                                                 </div>
                                                                             </div>
+																			<div class="row">
+                                                                                <div class="col-1">
+                                                                                    <i class="fas fa-info-meeting"></i>
+                                                                                </div>
+                                                                                <div class="col-11">
+                                                                                    <p id="md_meet"></p>
+                                                                                </div>
+                                                                            </div>
                                                                             <div class="row">
                                                                                 <div class="col-1">
                                                                                     <i class="fas fa-calendar-day"></i>
@@ -422,10 +430,10 @@
 						@if(count($date['events'])<1) <tr><td>{{$date['carbon']->translatedFormat('l d F')}}</td><td></td><td></td><td></td></tr> @endif
 						@foreach($date['events'] as $j => $event)
 								<tr>
-								<td>@if($j==0){{ $event['start']['carbon']->translatedFormat('l d F')  }}@endif</td>
-									<td>{{ $event['start']['carbon']->translatedFormat('H:i') }}-{{ $event['end']['carbon']->translatedFormat('H:i') }} </td>
-									<td>{{ $event['calendar'] }}</td>
-									<td>{{ $event['summary']  }}</td>
+								<td>@if($j==0){{ $event['object']['datetime_start']->translatedFormat('l d F')  }}@endif</td>
+									<td>{{ $event['object']['datetime_start']->translatedFormat('H:i') }}-{{ $event['object']['datetime_end']->translatedFormat('H:i') }} </td>
+									<td>{{ $event['object']['google_calendar_id'] }}</td>
+									<td>{{ $event['object']['summary']  }}</td>
 								</tr>
 						@endforeach
 					@endforeach
@@ -439,27 +447,27 @@
         </div>
     </div>
     <script>
-        function eventModal(eventId,calendarNo){
-            //console.log(eventId)
-            //console.log(calendarNo)
+        function eventModal(google_event_id){
+            //console.log(google_event_id)
+
             try {
 
                 $.post("{{ route('agenda.getdate') }}", {
-                    eventId: eventId,
-                    calendarNo: calendarNo,
+                    google_event_id: google_event_id,
                     "_token": "{{ csrf_token() }}",
                 })
                 .then(function(response){
                     event=response.data;
                     //console.log(event)
-                    $('#editEventId').val(event.id);
-                    $('#editCalendarId').val(event.calendarNo);
+                    $('#editEventId').val(event.google_event_id);
+                    $('#editCalendarId').val(event.google_calendar_id);
 
                     $('#md_summary').text(event.summary);
                     $('#md_location').text(event.location);
                     $('#md_room').text(event.attendees);
                     $('#md_guests').text(event.attendees);
                     $('#md_description').text(event.description);
+                    $('#md_meet').text(event.entrypoints);
                     $('#md_calendar').text(event.calendar);
 
                     $("#myModal").modal()

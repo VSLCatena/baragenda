@@ -8,7 +8,7 @@
     ],
     "license": "MIT",
     "require": {
-        "php": "^7.3.0",
+        "php": ">8",
         "adldap2/adldap2-laravel": "^6.1.5",
         "barryvdh/laravel-ide-helper": "^2.9",
         "fideloper/proxy": "^4.4",
