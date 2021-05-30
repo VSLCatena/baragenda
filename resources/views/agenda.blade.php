@@ -115,7 +115,7 @@
 												</div>
 												<div class="border-div grid-top-days" style="">
 													<div class="border-div top-days-list " style="">
-														@foreach(array_values($events) as $i => $date)
+														@foreach(array_values($dateList) as $i => $date)
 															<div class="vertDayColumn border-div ">
 																<div class="vertDayColumn-data border-div ">
 																	<div id="dayname_{{$i}}" class="vertDayColumn-dayname border-div ">
@@ -127,7 +127,6 @@
 																</div>
 															</div>
 														@endforeach
-														<div class="p-2 vertDayColumn border-div "></div>
 													</div>
 													<div  class="grid-top-allday border-div" >
 														<div  class="top-allday-data border-div" >
@@ -135,7 +134,7 @@
 																@php
 																	$loopvar = 0;
 																@endphp
-																@foreach($events as $i => $date)
+																@foreach($allDayEvents as $i => $date)
                                                                     @foreach($date['events'] as $j => $event)
 																		@if($event['shape']['size']>=1)
 																			<div style="

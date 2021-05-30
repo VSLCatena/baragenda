@@ -70,11 +70,12 @@ class AgendaController extends Controller
 		return $dates;
     }
 
-    private function calculateShape(Carbon $start, Carbon $end): Array {
+    private function calculateShape(Carbon $start, Carbon $end, Carbon $first=null): Array {
         //for each event calculate pos/size for display
             $eventFormat=array(
                 'pos'=>round(Carbon::parse($start)->startOfDay()->diffInMinutes(Carbon::parse($start))/1440,3),
-                'pos_day'=>round((intval($start->format('N'))-1)/7,2),
+                #'pos_day'=> round((intval($start->format('N'))-1)/7,2), #0 if before monday
+                'pos_day'=> $first==null ? round((intval($start->format('N'))-1)/7,2) : (Carbon::parse($start)->lessThan(Carbon::parse($first)) ? 0 : round((intval($start->format('N'))-1)/7,2)), #0 if before monday
                 'size'=>round(Carbon::parse($start)->diffInMinutes(Carbon::parse($end))/1440,3)
             );
             $eventFormat['size_day']=$eventFormat['size'] >7 ? 1 :  round((intval(Carbon::parse($end)->format('N'))-1)/7,2);
@@ -115,12 +116,13 @@ class AgendaController extends Controller
     public function index(Request $request)
     {   $date = $request ? Carbon::parse($request->date,"UTC") : Carbon::parse("today","UTC");
         $start = $date->copy()->startOfWeek();
-        $end = $start->copy()->endOfMonth();
+        $end = $start->copy()->endOfWeek();
         $dates = $this->getRangeEvents($start,$end); //get me range of dates between
         #echo("<pre>");print_r($dates);echo("</pre>");
         return view('agenda',array(
             'allDayEvents'=>$dates['allDayEvents'],
             'events'=>$dates['events'],
+            'dateList'=>$dates['dateList'],
             'selectedDate'=>$date
             ));
     }
@@ -140,6 +142,8 @@ class AgendaController extends Controller
         $allDayEvents =  Event::where('date_start','<=', $end)->where('date_end','>=',$start)->get(); //retrieve all values of full/multiday
         $dates['events'] = $this->mergeEventsDateRange($events,$dateList);
         $dates['allDayEvents'] = $this->mergeEventsDateRange($allDayEvents,$dateList);
+        $dates['dateList'] = $dateList;
+        echo("<pre>");print_r($dates['allDayEvents']);echo("</pre>");
         return $dates;
     }
 
@@ -157,7 +161,8 @@ class AgendaController extends Controller
                 $shape=$this->calculateShape($e->datetime_start,$e->datetime_end);
                 $dates[$e->datetime_start->format('Ymd')]['events'][]=array('source'=>$source,'shape'=>$shape,'object'=>$e);
             } else {
-                $shape=$this->calculateShape($e->date_start,$e->date_end) ;
+                $first = reset($dates)['carbon'];
+                $shape=$this->calculateShape($e->date_start,$e->date_end,$first) ;
                 $dates[$e->date_start->format('Ymd')]['events'][]=array('source'=>$source,'shape'=>$shape,'object'=>$e);
                 #$dates[$e->date_start->format('Ymd')]['events'][]=array('source'=>$source,'shape'=>$shape,'object'=>$e);
             } 
