@@ -297,7 +297,7 @@
 																<div id="grid_{{$i}}" class="border-div bottom-tabs-gridcell" style="position:relative">
 																	@foreach($date['events'] as $j => $event)
 																		@if($event['shape']['size']<1)
-																			<div onclick="eventModal('{{ $event['object']['google_event_id'] }}')" class="{{ $event['source']='Interne Agenda' ? 'event-button' : 'event-button2'}}"
+																			<div onclick="eventModal('{{ $event['object']['google_event_id'] }}')" class="{{ $event['source']=='Interne Agenda' ? 'event-button' : 'event-button2'}}"
 																			style="z-index: {{$j+15}};top:
 																				@if($event['shape']['pos']<=0.5) {{20/720*24*$event['shape']['pos'] *100}}% {{--20=time;720=total--}}
 																				@else {{((40/720)*(24*($event['shape']['pos']-0.5))+(0.5*24*(20/720))) * 100}}% {{--20&40=time;720=total--}}

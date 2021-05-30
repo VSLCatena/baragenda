@@ -34,7 +34,15 @@ class AgendaController extends Controller
 	 *
 	 * @return array
 	 */
-	private function generateDateRange(Carbon $start_date, Carbon $end_date, $firstday=false,$prepArray=false,$prepArrayFormat='Ymd',$nameArray='events')
+	
+    public function __construct()
+    {
+        
+        $this->google = config('baragenda')['google'];
+    }
+    
+    
+     private function generateDateRange(Carbon $start_date, Carbon $end_date, $firstday=false,$prepArray=false,$prepArrayFormat='Ymd',$nameArray='events')
 	{
         #
         # Start using     $period = CarbonPeriod::between($start1,$end1);
@@ -95,6 +103,9 @@ class AgendaController extends Controller
      
      
     }
+    private function expandDateRange(){
+        
+    }
 
     /**
      * Display a listing of the resource.
@@ -106,8 +117,10 @@ class AgendaController extends Controller
         $start = $date->copy()->startOfWeek();
         $end = $start->copy()->endOfMonth();
         $dates = $this->getRangeEvents($start,$end); //get me range of dates between
+        #echo("<pre>");print_r($dates);echo("</pre>");
         return view('agenda',array(
-            'events'=>$dates,
+            'allDayEvents'=>$dates['allDayEvents'],
+            'events'=>$dates['events'],
             'selectedDate'=>$date
             ));
     }
@@ -121,15 +134,13 @@ class AgendaController extends Controller
      */
     public function getRangeEvents($start,$end)
     {
-        $dates=$this->generateDateRange($start,$end,true,true); // give me an array of dates!!!!
+        $dateList=$this->generateDateRange($start,$end,true,true); // give me an array of dates!!!!
+
         $events =  Event::whereBetween('datetime_start', [$start, $end])->orWhereBetween('datetime_end',[$start,$end])->get(); //retrieve all values 
-        $eventsRange =  Event::whereNotNull('date_start')->whereNotNull('date_end')->get(); //retrieve all values
-        $events = $events->concat($eventsRange); 
-        $merged = $this->mergeEventsDateRange($events,$dates);
-        #echo("<pre>");print_r($merged);die;
-        return $merged;
-
-
+        $allDayEvents =  Event::where('date_start','<=', $end)->where('date_end','>=',$start)->get(); //retrieve all values of full/multiday
+        $dates['events'] = $this->mergeEventsDateRange($events,$dateList);
+        $dates['allDayEvents'] = $this->mergeEventsDateRange($allDayEvents,$dateList);
+        return $dates;
     }
 
 
@@ -141,17 +152,17 @@ class AgendaController extends Controller
     private function mergeEventsDateRange(object $events, $dates): Array
     {   
         $events->each(function ($e) use(&$dates) {
-            $source = $e->google_calendar_id == env('GOOGLE_CALENDAR_ID_PRIVATE') ? env('GSUITE_CAL_PRIV_SUMM_DISPLAY') : env('GSUITE_CAL_PUBL_SUMM_DISPLAY');
+            $source = $e->google_calendar_id == $this->google['calendar']['private'] ? $this->google['calendar']['private_name'] : $this->google['calendar']['public_name'];
             if($e->date_end == null){ 
                 $shape=$this->calculateShape($e->datetime_start,$e->datetime_end);
                 $dates[$e->datetime_start->format('Ymd')]['events'][]=array('source'=>$source,'shape'=>$shape,'object'=>$e);
             } else {
                 $shape=$this->calculateShape($e->date_start,$e->date_end) ;
-
+                $dates[$e->date_start->format('Ymd')]['events'][]=array('source'=>$source,'shape'=>$shape,'object'=>$e);
                 #$dates[$e->date_start->format('Ymd')]['events'][]=array('source'=>$source,'shape'=>$shape,'object'=>$e);
             } 
-           
-           echo("<pre>");print_r($e->summary);echo("<br>");print_r($e->date_start);print_r($e->date_end);print_r($shape);echo("</pre>");
+
+           #echo("<pre>");print_r($e->summary);echo("<br>");print_r($e->date_start);print_r($e->date_end);print_r($shape);echo("</pre>");
         });
     
             // //if startdate is IN this period
