@@ -1,4 +1,10 @@
 @media only screen and (max-width: 600px) {
+    .min-height40{
+        min-height:40px;
+    }
+    .modal-footer {
+        justify-content: space-between !important;
+    }
     .border-div {
         /* border:1px solidsolid black; */
     }
@@ -472,7 +478,12 @@
 
 }
 @media only screen and (min-width: 600px) {
-
+    .min-height40{
+        min-height:40px;
+    }
+    .modal-footer {
+        justify-content: space-between !important;
+    }
 
 
     .border-div {
@@ -483,6 +494,7 @@
     }
     .modal-dialog {
         box-shadow: 2px 2px #888888 !important;
+        border-radius: .3rem;
     }
     /*
     Google Div class transfered
