@@ -329,56 +329,56 @@
                                                                     </div>
                                                                     <div class="row">
                                                                         <div class="col-12">
-                                                                            <div class="row">
-                                                                                <div class="col-1">
+                                                                            <div class="row min-height40">
+                                                                                <div class="col-1" data-toggle="tooltip" title="Summary">
                                                                                     <i class="fas fa-circle"></i>
                                                                                 </div>
                                                                                 <div class="col-11">
                                                                                     <h3 id="md_summary"></h3>
                                                                                 </div>
                                                                             </div>
-                                                                            <div class="row">
-                                                                                <div class="col-1">
+                                                                            <div class="row min-height40">
+                                                                                <div class="col-1" data-toggle="tooltip" title="Location">
                                                                                     <i class="fas fa-city"></i>
                                                                                 </div>
                                                                                 <div class="col-11">
                                                                                     <p id="md_location"></p>
                                                                                 </div>
                                                                             </div>
-                                                                            <div class="row">
-                                                                                <div class="col-1">
-                                                                                    <i class="far fa-door-open"></i>
+                                                                            <div class="row min-height40">
+                                                                                <div class="col-1" data-toggle="tooltip" title="Room">
+                                                                                    <i class="fas fa-door-open"></i>
                                                                                 </div>
                                                                                 <div class="col-11">
                                                                                     <p id="md_room"></p>
                                                                                 </div>
                                                                             </div>
-                                                                            <div class="row">
-                                                                                <div class="col-1">
+                                                                            <div class="row min-height40">
+                                                                                <div class="col-1" data-toggle="tooltip" title="Attendees">
                                                                                     <i class="fas fa-users"></i>
                                                                                 </div>
                                                                                 <div class="col-11">
                                                                                     <p id="md_guests"></p>
                                                                                 </div>
                                                                             </div>
-                                                                            <div class="row">
-                                                                                <div class="col-1">
+                                                                            <div class="row min-height40">
+                                                                                <div class="col-1" data-toggle="tooltip" title="Description">
                                                                                     <i class="fas fa-info-circle"></i>
                                                                                 </div>
                                                                                 <div class="col-11">
                                                                                     <p id="md_description"></p>
                                                                                 </div>
                                                                             </div>
-																			<div class="row">
-                                                                                <div class="col-1">
-                                                                                    <i class="fas fa-info-meeting"></i>
+																			<div class="row min-height40">
+                                                                                <div class="col-1" data-toggle="tooltip" title="Meet Link">
+                                                                                    <i class="fas fa-briefcase"></i>
                                                                                 </div>
                                                                                 <div class="col-11">
                                                                                     <p id="md_meet"></p>
                                                                                 </div>
                                                                             </div>
-                                                                            <div class="row">
-                                                                                <div class="col-1">
+                                                                            <div class="row min-height40">
+                                                                                <div class="col-1" data-toggle="tooltip" title="Calendar">
                                                                                     <i class="fas fa-calendar-day"></i>
                                                                                 </div>
                                                                                 <div class="col-11">
