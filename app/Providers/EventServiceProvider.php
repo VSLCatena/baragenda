@@ -15,6 +15,10 @@ class EventServiceProvider extends ServiceProvider
      * @var array<class-string, array<int, class-string>>
      */
     protected $listen = [
+        \SocialiteProviders\Manager\SocialiteWasCalled::class => [
+            // add your listeners (aka providers) here
+            \SocialiteProviders\Azure\AzureExtendSocialite::class.'@handle',
+        ],
         Registered::class => [
             SendEmailVerificationNotification::class,
         ],
