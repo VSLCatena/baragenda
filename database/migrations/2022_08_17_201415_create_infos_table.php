@@ -26,11 +26,11 @@ return new class extends Migration
             $table->text('extra_info')->nullable(); //more info
             $table->json('groups')->nullable(); //=memberOf
             $table->integer('admin')->unsigned()->default(0); //1=super admin 2=other
-            #$table->string('mail'); //security issue?            
+            #$table->string('mail'); //security issue?
             $table->timestamps();
 
 			#foreign references
-			$table->foreign('user_id')->references('id')->on('users');            
+			$table->foreign('user_id')->references('id')->on('users');
         });
     }
 
