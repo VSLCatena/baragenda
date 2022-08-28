@@ -3,9 +3,13 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
 
-class ShiftUser extends Model
+
+use Illuminate\Database\Eloquent\Relations\Pivot;
+
+class ShiftUser extends Pivot
 {
     use HasFactory;
+
+    public $timestamps = false;
 }
