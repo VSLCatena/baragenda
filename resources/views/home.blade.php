@@ -17,7 +17,7 @@
                         <p>Je bezoekt deze pagina als gast</p>
                     @else
                         {{-- Hoi {{$user->info->name}}! --}}
-                        Hoi {{$user->username}}!
+                        Hoi {{$user->info->firstname}}!
 {{--                         @if (count($shifts) > 0)
 
                             <br><br>

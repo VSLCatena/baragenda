@@ -53,10 +53,10 @@
                     @guest
                     @else
                     <ul class="navbar-nav ms-auto">
-						{{-- <li class="nav-item"><a class="nav-link" href={{ route('agenda') }} >Agenda</a></li> --}}
-						{{-- <li class="nav-item"><a class="nav-link" href=" {{ route('shifts') }} ">Diensten</a></li> --}}
-						{{-- @admin <li class="nav-item"><a class="nav-link" href="{{ route('shifts.admin')}}">Dienstenbeheer</a></li>@endadmin --}}
-						{{-- @superadmin<li class="nav-item"><a class="nav-link" href=" {{route('management.settings') }} ">Beheer</a></li>@endsuperadmin --}}
+						<li class="nav-item"><a class="nav-link" href={{ route('agenda') }} >Agenda</a></li>
+						<li class="nav-item"><a class="nav-link" href=" {{ route('shifts') }} ">Diensten</a></li>
+						<li class="nav-item"><a class="nav-link" href="{{ route('shifts.admin')}}">Dienstenbeheer</a></li>
+						<li class="nav-item"><a class="nav-link" href=" {{route('management.settings') }} ">Beheer</a></li>
 
                     </ul>
                     @endguest
