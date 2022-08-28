@@ -8,6 +8,7 @@ use Illuminate\Foundation\Auth\AuthenticatesUsers;
 
 
 use App\Models\User;
+use App\Models\Info;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
@@ -46,14 +47,29 @@ class LoginController extends Controller
     public function callback() {
         $azureUser = Socialite::driver('azure')->user();
 
-        $user = User::updateOrCreate([
-            'username' => Str::before($azureUser->email,'@')
-        ], [
-            'username' => Str::before($azureUser->email,'@'),
-        ]);
+        $user = User::updateOrCreate(
+            ['username' => Str::before($azureUser->email,'@')],
+            ['token' => $azureUser->token]
+        );
+
+        /*     $azureUser = SocialiteProviders\Manager\OAuth2\User Object
+        (
+            [user] => Array
+            (
+                [displayName] => Martijn Koetsier
+                [givenName] => Martijn
+                [mail] => mkoetsier1@vslcatena.nl
+                [surname] => Koetsier
+                [id] => a93fd493-90b0-40fd-8d0e-b6678bb584bb
+                )
+                */
+        $info = $user->info ?: new Info;
+        $info->objectGUID = $azureUser->getId();
+        $info->name = $azureUser->getName();
+        $info->firstname = $azureUser->user['givenName'];
+        $user->info()->save($info);
 
         Auth::login($user);
-
         return redirect('/home');
     }
 
