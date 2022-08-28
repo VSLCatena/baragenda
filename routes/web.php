@@ -37,25 +37,9 @@ Route::match(['get', 'post'], '/login', [LoginController::class, 'login'])->name
 Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 
 //auth azure
-Route::get('/auth/redirect', function () {
-    return Socialite::driver('azure')->redirect();
-});
-Route::get('/auth/callback', function () {
-    $azureUser = Socialite::driver('azure')->user();
+Route::get('/auth/redirect', [LoginController::class,'redirect'])->name('redirect');
+Route::get('/auth/callback', [LoginController::class,'callback'])->name('callback');
 
-    $user = User::updateOrCreate([
-        'username' => Str::before($azureUser->email,'@')
-    ], [
-        'username' => Str::before($azureUser->email,'@'),
-       # 'email' => $azureUser->email,
-       # 'azure_token' => $azureUser->token,
-       # 'azure_refresh_token' => $azureUser->refreshToken,
-    ]);
-
-    Auth::login($user);
-
-    return redirect('/home');
-});
 
 
 //agenda
