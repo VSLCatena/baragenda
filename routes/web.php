@@ -19,10 +19,15 @@ use Illuminate\Support\Str;
 |
 */
 
+//home
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 Route::get('/', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+
+//login
 Route::match(['get', 'post'], '/login', [App\Http\Controllers\Auth\LoginController::class, 'login'])->name('login');
 Route::post('/logout', [App\Http\Controllers\Auth\LoginController::class, 'logout'])->name('logout');
+
+//auth azure
 Route::get('/auth/redirect', function () {
     return Socialite::driver('azure')->redirect();
 });
