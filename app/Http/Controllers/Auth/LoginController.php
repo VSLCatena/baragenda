@@ -77,7 +77,7 @@ class LoginController extends Controller
     {
          Auth::guard()->logout();
          $request->session()->flush();
-         $azureLogoutUrl = Socialite::driver('azure')->getLogoutUrl(route('login'));
+         $azureLogoutUrl = Socialite::driver('azure')->getLogoutUrl(route('home'));
          return redirect($azureLogoutUrl);
     }
 
