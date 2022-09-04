@@ -3,7 +3,7 @@
 namespace App\Console\Commands;
 
 use Spatie\GoogleCalendar\Event as GEvent;
-use Spatie\GoogleCalendar\Resource;
+use App\Helpers\GoogleCalendarResource\Resource;
 use App\Models\Event as LEvent;
 use App\Models\Location;
 use Carbon\Carbon;
