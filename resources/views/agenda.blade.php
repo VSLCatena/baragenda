@@ -1,9 +1,12 @@
 @section('scripts')
-	<script src="{{ asset('js/agenda.js') }}" defer></script>
-	<script src="{{ asset('js/moment-timezone.js') }}" defer></script>
+<script src="{{ asset('js/functions.js') }}" defer></script>
+<script src="{{ asset('js/moment-timezone.js') }}" defer></script>
+
+
 @section('styles')
-	<link href="{{ asset('css/agenda.css') }}" rel="stylesheet">
-	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.0.0-alpha14/css/tempusdominus-bootstrap-4.min.css" />
+<link href="{{ asset('css/agenda.css') }}" rel="stylesheet">
+
+
 @extends('layouts.app')
 
 @section('content')
@@ -33,7 +36,7 @@
 
 						<div class="border-div ag-full" style="">
 							<div class="border-div ag-left" style="">
-                                @admin
+                                {{-- @admin@admin --}}
                                     <div class="ag-create-wrapper">
                                         <a href={{ route('agenda.edit')}}>
                                             <div class="ag-create-container">
@@ -56,7 +59,7 @@
                                             </div>
                                         </a>
                                     </div>
-                                @endadmin
+                                {{-- @endadmin --}}
 								<div class="cal_left">
 									<div class="row">
 										<div class="col-12">
@@ -64,7 +67,16 @@
 												<div class="form-group">
 													<div class="row">
 														<div class="col-md-12">
-                                                            <div id="datetimepicker13" style="border: 1px solid #0000000d"></div>
+                                                            <div class="col-sm-12" id="htmlTarget">
+                                                                <label for="datetimepicker1Input" class="form-label">Picker</label>
+                                                                <div class="input-group log-event" id="datetimepicker1" data-td-target-input="nearest" data-td-target-toggle="nearest">
+                                                                  <input id="datetimepicker1Input" type="text" class="form-control" data-td-target="#datetimepicker1" />
+                                                                  <span class="input-group-text" data-td-target="#datetimepicker1" data-td-toggle="datetimepicker" >
+                                                                    <i class="fas fa-calendar"></i>
+                                                                  </span>
+                                                                </div>
+                                                              </div>
+                                                            <div id="datetimepicker1" style="border: 1px solid #0000000d"></div>
                                                             <form id="dateform" autocomplete="off" action="{{ route('agenda') }}" method='POST' style="display:none;">
                                                                 {{ csrf_field() }}
                                                                 <input type="text" id="date" name="date" />
@@ -77,18 +89,33 @@
 												<script type="text/javascript">
 												var data
 													$(function () {
-														$('#datetimepicker13').datetimepicker({
-                                                            defaultDate: moment("{{$selectedDate->translatedFormat('Y-m-d')}}"),
-                                                            locale:'nl',
-                                                            timeZone: 'Europe/Amsterdam',
-															buttons: {showToday: true},
-															calendarWeeks: true,
-															inline: true,
-															format: 'L'
+                                                        const picker = new tempusDominus.TempusDominus(document.getElementById('datetimepicker1'),{
+                                                            // defaultDate: moment("{{$selectedDate->translatedFormat('Y-m-d')}}"),
+                                                            localization: {
+                                                                locale: 'nl',
+                                                            },
+                                                            display: {
+                                                                    buttons: {
+                                                                        today: true,
+                                                                    },
+                                                                calendarWeeks: true,
+                                                                inline: true,
+                                                                    components: {
+                                                                        calendar: true,
+                                                                        date: true,
+                                                                        month: true,
+                                                                        year: true,
+                                                                        decades: true,
+                                                                        clock: false,
+                                                                        useTwentyfourHour: true,
+                                                                    }
+                                                            }
 														});
 													});
 													$( document ).ready(function() {
-														$("#datetimepicker13").on("change.datetimepicker", function (e) {
+
+
+														$("#datetimepicker1").on("change.datetimepicker", function (e) {
 															iso=moment(e.date._d).toISOString();
                                                             console.log(iso)
                                                             $("#date").val(iso)
@@ -317,11 +344,14 @@
 														</div>
 													</div>
 														<!-- Modal -->
-														<div id="myModal" class="modal fade" role="dialog" >
+														<div id="myModal" class="modal fade" role="dialog" tabindex="-1">
 															<div class="modal-dialog">
-
+                                                                <div class="modal-content">
+                                                                <div class="modal-header">
+                                                                    <h5 class="modal-title">Modal title</h5>
+                                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                                </div>
 															<!-- Modal content-->
-															<div class="modal-content">
 																<div class="modal-body" style="min-height:300px;max-width: 448px;width: 448px; padding-left: 1.5rem;">
                                                                     <div class="row" style="height:136px;">
                                                                         Top image
@@ -388,14 +418,14 @@
                                                                     </div>
 																</div>
 																<div class="modal-footer">
-                                                                    @admin
+                                                                    {{-- @admin --}}
                                                                         <form id="editEventForm" autocomplete="off" action="{{ route('agenda.edit') }}" style="margin-block-end: 0em;" method='GET' >
                                                                             {{ csrf_field() }}
                                                                             <input type="hidden" id="editEventId" name="eventId" value="" />
                                                                             <input type="hidden" id="editCalendarId" name="calendarNo" value="" />
                                                                         <button type="submit" class="btn btn-default" >Aanpassen</button>
                                                                         </form>
-                                                                    @endadmin
+                                                                    {{-- @endadmin --}}
 																    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
 																</div>
 															</div>
