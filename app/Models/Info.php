@@ -26,4 +26,9 @@ class Info extends Model
     {
         return $this->belongsTo('App\Models\User');
     }
+
+    public function committee()
+    {
+        return $this->belongsToMany('App\Models\Committee');
+    }
 }

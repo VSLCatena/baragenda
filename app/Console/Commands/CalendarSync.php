@@ -17,7 +17,7 @@ class CalendarSync extends Command
      *
      * @var string
      */
-    protected $signature = 'reservation:CalendarSync';
+    protected $signature = 'command:CalendarSync';
 
     /**
      * The console command description.

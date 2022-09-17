@@ -16,8 +16,8 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule)
     {
         // $schedule->command('inspire')->hourly();
-        $schedule->command('reservation:CalendarSync')
-        ->everyThirtyMinutes();
+        $schedule->command('command:CalendarSync')->everyThirtyMinutes();
+        $schedule->command('command:AzureADSync')->dailyAt('5:00');
     }
 
     /**

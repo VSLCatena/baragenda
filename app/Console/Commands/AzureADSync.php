@@ -6,6 +6,9 @@ use Illuminate\Console\Command;
 
 
 use App\Helpers\MSGraphAPI\Group as MSGraphAPIGroup;
+use Illuminate\Support\Arr;
+use App\Models\Committee;
+use App\Models\Info;
 class AzureADSync extends Command
 {
     /**
@@ -31,13 +34,53 @@ class AzureADSync extends Command
     {
 
         $msgraphapi = new MSGraphAPIGroup();
-        $GroupCommissies = $msgraphapi->getGroupInfo("commissies");
-        $GroupLeden = $msgraphapi->getGroupInfo("leden");
+        $GroupCommittee = $msgraphapi->getGroupInfo("commissies"); #only group itself
+        $GroupCommittee_Members = $msgraphapi->getGroupMembers($GroupCommittee[0]['id']);
 
-        $GroupLedenMembers =  $msgraphapi->getGroupMembers($GroupLeden[0]['id']);
-        $GroupCommissiesMembers = $msgraphapi->getGroupMembers($GroupCommissies[0]['id']);
+        $GroupLeden = $msgraphapi->getGroupInfo("leden"); #only group itself
+        $GroupLedenMembers = $msgraphapi->getGroupMembers($GroupLeden[0]['id']);
 
-        //some sync stuff
+        #create users vs committees array
+        $users=array();
+        foreach ($GroupCommittee_Members['members'] as $key => $Committee) {
+            if($Committee['objectType'] == "user") {continue;}
+            $CommitteeMembers = $msgraphapi->getGroupMembers($Committee['id']);
+            foreach ($CommitteeMembers['members'] as $key => $member) {
+                if(!(array_key_exists($member['id'],$users))){
+                    $users[$member['id']]=array('id'=>$member['id']);
+                }
+                $users[$member['id']]['committee'][]=array(
+                    "displayName"=>$Committee['displayName'],
+                    "id"=>$Committee['id']
+                );
+            }
+        }
 
+
+        # add committees
+        foreach($GroupCommittee_Members['members'] as $Committee) {
+            Committee::updateOrCreate(
+                ['objectGUID'=> $Committee['id']],
+                ['name'=> $Committee['displayName']
+            ]);
+        }
+
+        # add members
+        foreach($GroupLedenMembers['members'] as $userInfo) {
+            $userInfoObj = Info::updateOrCreate(
+                ['objectGUID'   => $userInfo['id']],
+                ['lidnummer'=> $userInfo['employeeNumber'],
+                'relatienummer'=> $userInfo['employeeId'],
+                'name'  => $userInfo['displayName'],
+                'firstname'    => $userInfo['givenName'],
+                'email'    => $userInfo['mail'],
+            ]);
+            if(array_key_exists($userInfo['id'],$users)){
+                foreach($users[$userInfo['id']]['committee'] as $c){
+                    $committeeObj=Committee::where('objectGUID',$c['id'])->first();
+                    $userInfoObj->committee()->attach($committeeObj);
+                }
+            }
+        }
     }
 }
