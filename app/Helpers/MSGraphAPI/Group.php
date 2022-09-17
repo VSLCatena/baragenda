@@ -84,6 +84,7 @@ class Group {
             //prepare output
             $GroupObject['count']=$content['@odata.count'] ?? null;
             $GroupObject['group']=array("id"=> $groupID);
+            $GroupObject['members']=array();
             //loop over content
             foreach ($content['value'] as $key => $val) {
                 $description = Arr::has($val,$this->descriptionProperty) ? Arr::join( $val[$this->descriptionProperty] , ',' ) : null;
