@@ -14,7 +14,8 @@ return new class extends Migration
     public function up()
     {
         Schema::table('infos', function (Blueprint $table) {
-            $table->string('firstname')->after('name'); //First Lastname
+            $table->string('firstname')->after('name')->nullable; //First Lastname
+            $table->id()->nullable(); //First Lastname
         });
     }
 
