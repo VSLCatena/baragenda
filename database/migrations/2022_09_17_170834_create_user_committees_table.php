@@ -13,12 +13,12 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('user_committee', function (Blueprint $table) {
+        Schema::create('info_committee', function (Blueprint $table) {
             $table->integer('committee_id')->unsigned();
-            $table->integer('user_id')->unsigned();
+            $table->integer('info_id')->unsigned();
             #foreign references
             $table->foreign('committee_id')->references('id')->on('committees');
-            $table->foreign('user_id')->references('id')->on('users');
+            $table->foreign('info_id')->references('id')->on('infos');
 
             });
     }
