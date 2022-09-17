@@ -25,6 +25,10 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('users');
+        Schema::table('users', function (Blueprint $table) {
+            $table->string('email')->unique();
+            $table->timestamp('email_verified_at');
+            $table->string('password');
+        });
     }
 };

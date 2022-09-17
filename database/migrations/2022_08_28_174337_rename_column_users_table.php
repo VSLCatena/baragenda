@@ -15,6 +15,9 @@ return new class extends Migration
     {
         Schema::table('users', function (Blueprint $table) {
             $table->renameColumn('remember_token', 'token');
+        });
+        //separate due to error by manipulation on non-existing column
+        Schema::table('users', function (Blueprint $table) {
             $table->string('token', 2560)->change();
         });
     }
@@ -26,6 +29,9 @@ return new class extends Migration
      */
     public function down()
     {
-        //
+        Schema::table('users', function (Blueprint $table) {
+            $table->renameColumn('token', 'remember_token');
+            $table->string('token', 2560)->change();
+        });
     }
 };
