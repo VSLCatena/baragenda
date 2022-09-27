@@ -18,7 +18,7 @@ class ShiftAdminController extends ShiftController
 
     public function __construct(){
         parent::__construct();
-        $this->middleware('isAdmin');
+        // $this->middleware('isAdmin');
     }
     //get me last day or first day of week
     private function getDayStartEnd(Carbon $date, $start=true)

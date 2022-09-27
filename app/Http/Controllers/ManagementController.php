@@ -16,10 +16,10 @@ class ManagementController extends Controller
     //you need to be admin
     public function __construct() {
         $this->middleware('auth');
-        $this->middleware('isSuperAdmin');
+        // $this->middleware('isSuperAdmin');
     }
     //if button new row has been pressed
-     public function newRow(Request $request){
+    public function newRow(Request $request){
         $user = Auth::user();
         $st = new ShiftType;
         $st->title="_NO_NAME";
