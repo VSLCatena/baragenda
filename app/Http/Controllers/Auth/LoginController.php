@@ -31,7 +31,7 @@ class LoginController extends Controller
             return view('login');
         }
         if($request->isMethod('post')){
-            if(env('APP_ENV') == 'local' && env('APP_OFFINE')==1 ){
+            if(env('APP_ENV') == 'local' && env('APP_OFFLINE')==1 ){
                     $user=User::where('username',env('APP_DEBUG_USERNAME'))->first();
                     Auth::login($user, false);
                     return redirect(route('home'));
