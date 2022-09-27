@@ -13,7 +13,7 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('info_committee', function (Blueprint $table) {
+        Schema::create('committee_info', function (Blueprint $table) {
             $table->integer('committee_id')->unsigned();
             $table->integer('info_id')->unsigned();
             #foreign references
@@ -31,6 +31,6 @@ return new class extends Migration
     public function down()
     {
         Schema::disableForeignKeyConstraints();
-        Schema::dropIfExists('user_committee');
+        Schema::dropIfExists('committee_info');
     }
 };
