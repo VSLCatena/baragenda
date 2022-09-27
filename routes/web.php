@@ -37,7 +37,6 @@ Route::match(['get', 'post'], '/login', [LoginController::class, 'login'])->name
 Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 
 //auth azure
-Route::get('/auth/redirect', [LoginController::class,'redirect'])->name('redirect');
 Route::get('/auth/callback', [LoginController::class,'callback'])->name('callback');
 
 
