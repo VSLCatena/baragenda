@@ -27,21 +27,22 @@ class LoginController extends Controller
 
 
     public function login(Request $request){
-        if($request->isMethod('get'))
+        if($request->isMethod('get')){
             return view('login');
-        //debug login, username must exist in database, then you can login without Az
-        // if(App::environment('local', 'dev')){
-        //     if (User::with('info')->get()->contains('username', strtolower($request->username))){
-        //         $user=User::where('username',$request->username)->first();
-        //         Auth::login($user, true);
-        //         return redirect(route('home'));
-        //     }
-        // }
-        return Socialite::with('azure')->redirect(route('home'));
-    }
-
-    public function redirect(){
-        return Socialite::driver('azure')->redirect();
+        }
+        if($request->isMethod('post')){
+            if(env('APP_ENV') == 'local' && env('APP_OFFINE')==1 ){
+                    $user=User::where('username',env('APP_DEBUG_USERNAME'))->first();
+                    Auth::login($user, false);
+                    return redirect(route('home'));
+            }
+        } else {
+            return Socialite::driver('azure')->with([
+                'prompt'        => 'select_account',
+                'whr'           =>'vslcatena.nl',
+                'domain_hint'   =>'vslcatena.nl'
+                ])->redirect(route('home'));
+        }
     }
 
     public function callback() {
@@ -52,17 +53,6 @@ class LoginController extends Controller
             ['token' => $azureUser->token]
         );
 
-        /*     $azureUser = SocialiteProviders\Manager\OAuth2\User Object
-        (
-            [user] => Array
-            (
-                [displayName] => Martijn Koetsier
-                [givenName] => Martijn
-                [mail] => mkoetsier1@vslcatena.nl
-                [surname] => Koetsier
-                [id] => a93fd493-90b0-40fd-8d0e-b6678bb584bb
-                )
-                */
         $info = $user->info ?: new Info;
         $info->objectGUID = $azureUser->getId();
         $info->name = $azureUser->getName();
@@ -75,10 +65,10 @@ class LoginController extends Controller
 
     public function logout(Request $request)
     {
-         Auth::guard()->logout();
-         $request->session()->flush();
-         $azureLogoutUrl = Socialite::driver('azure')->getLogoutUrl(route('home'));
-         return redirect($azureLogoutUrl);
+        Auth::guard()->logout();
+        $request->session()->flush();
+        $azureLogoutUrl = Socialite::driver('azure')->getLogoutUrl(route('home'));
+        return redirect($azureLogoutUrl);
     }
 
 }
