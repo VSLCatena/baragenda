@@ -6,6 +6,11 @@ use Illuminate\Http\Request;
 
 
 use Illuminate\Support\Facades\Auth;
+#use Laravel\Socialite\Facades\Socialite;
+use App\Helpers\MSGraphAPI\Group as MSGraphAPIGroup;
+use Illuminate\Support\Arr;
+use App\Models\Committee;
+use App\Models\Info;
 class UserSettingsController extends Controller
 {
     public function __construct() {
@@ -19,7 +24,14 @@ class UserSettingsController extends Controller
         //get request
         if($request->isMethod('get')){
             $info = Auth::user()->info;
-            return view('profile',array('info' => $info));
+            #$committees = $info->committee;
+            #$comnames = Arr::join($committees->name,",");
+            $committees = $info->committee()->get()->all();
+
+            return view('profile',array(
+                'info' => $info,
+                'committees' => $committees
+            ));
         }
 
 
