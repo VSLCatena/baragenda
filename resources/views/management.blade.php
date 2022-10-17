@@ -79,7 +79,7 @@
 														</script>
 
 											</td>
-                                            <td>{{Carbon\Carbon::parse($s->updated_at)->format('Y-m-d H:i')}} <br>{{($s->user->info->name)}}</td>
+                                            <td>{{Carbon\Carbon::parse($s->updated_at)->format('Y-m-d H:i')}} <br>{{($s->user->info->name) ?? null}}</td>
                                             <td>{{Carbon\Carbon::parse($s->created_at)->format('Y-m-d H:i')}}</td>
                                         <td>
 

@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-
+use Illuminate\Support\Facades\Log;
 
 use App\Models\ShiftType as ShiftType;
 use App\Models\Committee as Committee;
@@ -34,13 +34,17 @@ class ManagementController extends Controller
     }
     //if page has been saved
     public function changeSettings(Request $request){
-        if(Auth::user()->info->admin!=1) { // you admin sir?
+        $data=Auth::user()->info->committee()->get()->firstWhere('name', 'reprehenderitcie');
+        log::info($data->name);
+        if($data->name == null ) { # ->doesntContain('reprehenderitcie'))  // you admin sir?
             return redirect(route('home'));
         }
         //get request , when you show the page
         if($request->isMethod('get')){
             $shifttypes=ShiftType::with('committee','user.info')->get();
             $committees=Committee::get();
+            log::debug($shifttypes);
+            log::debug($committees);
             return view('management', compact('shifttypes','committees'));
         }
 
