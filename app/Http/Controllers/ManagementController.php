@@ -34,7 +34,7 @@ class ManagementController extends Controller
     }
     //if page has been saved
     public function changeSettings(Request $request){
-        $data=Auth::user()->info->committee()->get()->firstWhere('name', 'reprehenderitcie');
+        $data=Auth::user()->info->committee()->get()->firstWhere('objectGUID', env('ADMIN_GROUP_ID'));
         log::info($data->name);
         if($data->name == null ) { # ->doesntContain('reprehenderitcie'))  // you admin sir?
             return redirect(route('home'));
