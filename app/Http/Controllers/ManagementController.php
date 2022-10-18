@@ -11,6 +11,8 @@ use Carbon\Carbon;
 
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Database\Eloquent\Collection;
+use Throwable;
+
 class ManagementController extends Controller
 {
     //you need to be admin
@@ -35,8 +37,12 @@ class ManagementController extends Controller
     //if page has been saved
     public function changeSettings(Request $request){
         $data=Auth::user()->info->committee()->get()->firstWhere('objectGUID', env('ADMIN_GROUP_ID'));
-        log::info($data->name);
-        if($data->name == null ) { # ->doesntContain('reprehenderitcie'))  // you admin sir?
+        try {
+            log::info($data->name);
+        } catch(Throwable $th) {
+            Log::debug("User not in required group");
+        }
+        if(!(isset($data->name))) { # ->doesntContain('reprehenderitcie'))  // you admin sir?
             return redirect(route('home'));
         }
         //get request , when you show the page
