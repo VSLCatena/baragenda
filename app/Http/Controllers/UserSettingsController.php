@@ -11,13 +11,17 @@ use App\Helpers\MSGraphAPI\Group as MSGraphAPIGroup;
 use Illuminate\Support\Arr;
 use App\Models\Committee;
 use App\Models\Info;
+
+use App\Http\Middelware\PrivilegeVerfier;
+
 class UserSettingsController extends Controller
 {
     public function __construct() {
         $this->middleware('auth');
+        $this->middleware('privilege');
     }
     //when page is opeened
-    public function changeSettings(Request $request){
+    public function changeSettings(Request $request,$arr=5 ){
         if(Auth::user()->service_user){
             return redirect(route('home'));
         }
