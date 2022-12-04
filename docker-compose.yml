@@ -1,7 +1,8 @@
 # For more information: https://laravel.com/docs/sail
 version: '3'
 services:
-    laravel.test:
+    baragenda.test:
+        container_name: baragenda.test
         build:
             context: ./vendor/laravel/sail/runtimes/8.1
             dockerfile: Dockerfile
@@ -25,9 +26,10 @@ services:
         networks:
             - sail
         depends_on:
-            - mysql
-    mysql:
-        image: 'mysql/mysql-server:8.0'
+            - baragenda.mariadb
+    baragenda.mariadb:
+        container_name: baragenda.mariadb
+        image: 'mariadb:10'
         hostname: db
         ports:
             - '${FORWARD_DB_PORT:-3306}:3306'
@@ -39,7 +41,7 @@ services:
             MYSQL_PASSWORD: '${DB_PASSWORD}'
             MYSQL_ALLOW_EMPTY_PASSWORD: 1
         volumes:
-            - 'sail-mysql:/var/lib/mysql'
+            - 'sail-mariadb:/var/lib/mysql'
             - './vendor/laravel/sail/database/mysql/create-testing-database.sh:/docker-entrypoint-initdb.d/10-create-testing-database.sh'
         networks:
             - sail
@@ -48,7 +50,8 @@ services:
             retries: 3
             timeout: 5s
     #phpmyadmin
-    laravel.pma:
+    baragenda.phpmyadmin:
+        container_name: baragenda.phpmyadmin
         image: phpmyadmin/phpmyadmin:latest
         environment:
             PMA_HOST: db
@@ -58,9 +61,15 @@ services:
             - '${FORWARD_PMA_PORT:-8088}:80'
         networks:
             - sail
-networks: 
-    sail:
-        driver: bridge
 volumes:
-    sail-mysql:
+    sail-mariadb:
         driver: local
+networks:
+  sail:
+    driver: bridge
+    ipam:
+     driver: default
+     config:
+       - subnet: 172.23.0.1/24
+    driver_opts:
+     com.docker.network.bridge.name: baragenda_net
