@@ -29,8 +29,8 @@ class Info extends Model
         return $this->belongsTo('App\Models\User');
     }
 
-    public function committee()
+    public function committees()
     {
-        return $this->belongsToMany('App\Models\Committee');
+        return $this->belongsToMany(Committee::class, 'committee_info', 'info_id', 'committee_id');
     }
 }

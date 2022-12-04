@@ -16,10 +16,27 @@ class Committee extends Model
     protected $fillable = [
 		'objectGUID' ,'name','created_at', 'updated_at'
     ];
+    public $table = "committees";
 
-
-    public function info()
+    public function infos()
     {
-        return $this->belongsToMany('App\Models\Info');
+        return $this->belongsToMany(Info::class, 'committee_info', 'committee_id','info_id');
     }
+    
+    public function skill()
+    {   
+        return $this->hasMany('App\Models\Skill');
+    }
+    
+    
+    public function event()
+    {   
+        return $this->hasMany('App\Models\Event');
+    }
+    
+    public function shifttype()
+    {   
+        return $this->hasMany('App\Models\ShiftType');
+    }
+
 }

@@ -16,4 +16,8 @@ class Location extends Model
     protected $fillable = [
 		'id' ,'name',  'resource_id', 'generatedname','capacity','floorname','floorsection','features','email', 'created_at', 'updated_at'
 	 ];
+	 
+    public function event(){
+		return $this->hasMany('App\Models\Event');
+    }
 }

@@ -35,17 +35,16 @@ class Event extends Model
 		'summary','description','datetime_start','datetime_end','date_start','date_end','recurring_start','recurring_end','rrule','all_day','location','attendees','entrypoints','status','google_calendar_id','google_event_id','google_parent_event_id','google_updated','google_created','guests_caninviteothers','guests_canmodify','guests_canseeotherguests','organizer_displayname','creator_displayname','organizer_email','creator_email','htmllink','updated_by','committee_id'
 	 ];
 
-	public function getUser(){
+	public function user(){
 		return $this->hasMany('App\Models\User');
     }
-	public function getLocation(){
-		return $this->hasMany('App\Models\Location');
+	public function location(){
+		return $this->belongsTo('App\Models\Location');
     }
-	public function getShift(){
+	public function shift(){
 		return $this->hasMany('App\Models\Shift');
     }
-	public function getCommittee(){
+	public function committee(){
 		return $this->hasMany('App\Models\Committee');
     }
 }
-
