@@ -1,7 +1,8 @@
 @section('scripts')
 <script src="{{ asset('js/functions.js') }}" defer></script>
 <script src="{{ asset('js/moment-timezone.js') }}" defer></script>
-
+<script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/js/solid.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/js/fontawesome.min.js"></script>
 
 @section('styles')
 <link href="{{ asset('css/agenda.css') }}" rel="stylesheet">
@@ -68,12 +69,7 @@
 													<div class="row">
 														<div class="col-md-12">
                                                             <div class="col-sm-12" id="htmlTarget">
-                                                                <label for="datetimepicker1Input" class="form-label">Picker</label>
                                                                 <div class="input-group log-event" id="datetimepicker1" data-td-target-input="nearest" data-td-target-toggle="nearest">
-                                                                  <input id="datetimepicker1Input" type="text" class="form-control" data-td-target="#datetimepicker1" />
-                                                                  <span class="input-group-text" data-td-target="#datetimepicker1" data-td-toggle="datetimepicker" >
-                                                                    <i class="fas fa-calendar"></i>
-                                                                  </span>
                                                                 </div>
                                                               </div>
                                                             <div id="datetimepicker1" style="border: 1px solid #0000000d"></div>
@@ -89,15 +85,18 @@
 												<script type="text/javascript">
 												var data
 													$(function () {
-                                                        const picker = new tempusDominus.TempusDominus(document.getElementById('datetimepicker1'),{
+
+                                                        const picker = new tempusDominus
+                                                            .TempusDominus(document.getElementById('datetimepicker1'),{
                                                             // defaultDate: moment("{{$selectedDate->translatedFormat('Y-m-d')}}"),
                                                             localization: {
                                                                 locale: 'nl',
                                                             },
                                                             display: {
-                                                                    buttons: {
-                                                                        today: true,
-                                                                    },
+                                                                theme: 'dark',
+                                                                buttons: {
+                                                                    today: true,
+                                                                },
                                                                 calendarWeeks: true,
                                                                 inline: true,
                                                                     components: {
@@ -111,12 +110,16 @@
                                                                     }
                                                             }
 														});
-													});
+                                                        const subscription = picker.subscribe(tempusdominus.Namespace.events.change, (e) => {
+                                                            console.log(e);
+                                                        });
+
+                                                    });
 													$( document ).ready(function() {
 
 
 														$("#datetimepicker1").on("change.datetimepicker", function (e) {
-															iso=moment(e.date._d).toISOString();
+															var iso=moment(e.date._d).toISOString();
                                                             console.log(iso)
                                                             $("#date").val(iso)
                                                             $("#dateform").submit()
