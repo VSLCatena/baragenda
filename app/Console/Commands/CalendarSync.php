@@ -6,6 +6,7 @@ use Spatie\GoogleCalendar\Event as GEvent;
 use App\Helpers\GoogleCalendarResource\Resource;
 use App\Models\Event as LEvent;
 use App\Models\Location;
+use App\Models\Info;
 use Carbon\Carbon;
 use RRule\RRule;
 use Illuminate\Console\Command;
@@ -24,7 +25,7 @@ class CalendarSync extends Command
      *
      * @var string
      */
-    protected $description = 'Command description';
+    protected $description = 'Sync of Google Calendar events to this instance';
 
     /**
      * Create a new command instance.
@@ -36,6 +37,7 @@ class CalendarSync extends Command
         parent::__construct();
         $config = config('baragenda');
         $this->google = $config['google'];
+        $this->googleUser = Info::where('name', 'GoogleSync')->first()->user->id;
     }
 
     /**
@@ -165,7 +167,7 @@ class CalendarSync extends Command
                         'organizer_email'       =>  $item->organizer->email,
                         'creator_email'         =>  $item->creator->email,
                         'htmllink'              =>  $item->htmlLink,
-                        'updated_by'            =>  900913,
+                        'updated_by'            =>  $this->googleUser,
                         'committee_id'          =>  null,
                     ]);
                     $event->save();
