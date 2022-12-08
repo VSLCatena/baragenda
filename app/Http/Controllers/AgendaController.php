@@ -38,7 +38,8 @@ class AgendaController extends Controller
 
     public function __construct()
     {
-
+        $this->middleware('auth');
+        $this->middleware('privilege');
         $this->google = config('baragenda')['google'];
     }
 
