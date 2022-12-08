@@ -110,9 +110,9 @@
                                                                     }
                                                             }
 														});
-                                                        const subscription = picker.subscribe(tempusdominus.Namespace.events.change, (e) => {
-                                                            console.log(e);
-                                                        });
+                                                        // const subscription = picker.subscribe(tempusdominus.Namespace.events.change, (e) => {
+                                                        //     console.log(e);
+                                                        // });
 
                                                     });
 													$( document ).ready(function() {
@@ -480,7 +480,7 @@
     </div>
     <script>
         function eventModal(google_event_id){
-            //console.log(google_event_id)
+            // console.log(google_event_id) //werkt gewoon
 
             try {
 
@@ -490,7 +490,7 @@
                 })
                 .then(function(response){
                     event=response.data;
-                    //console.log(event)
+                    //console.log(event)  //dit werkt gewoon
                     $('#editEventId').val(event.google_event_id);
                     $('#editCalendarId').val(event.google_calendar_id);
 
