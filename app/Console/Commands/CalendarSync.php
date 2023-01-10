@@ -37,7 +37,7 @@ class CalendarSync extends Command
         parent::__construct();
         $config = config('baragenda');
         $this->google = $config['google'];
-        $this->googleUser = Info::where('name', 'GoogleSync')->first()->user->id;
+        $this->googleUser = Info::where('name', 'GoogleSync')->first()->user->id ?? null;
     }
 
     /**
