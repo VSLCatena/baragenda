@@ -33,4 +33,8 @@ class Info extends Model
     {
         return $this->belongsToMany(Committee::class, 'committee_info', 'info_id', 'committee_id');
     }
+    public function skills()
+    {
+        return $this->belongsToMany(Skill::class, 'info_skill', 'info_id', 'skill_id');
+    }
 }

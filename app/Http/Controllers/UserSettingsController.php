@@ -30,10 +30,11 @@ class UserSettingsController extends Controller
             $info = Auth::user()->info;
             #$committees = $info->committee;
             #$comnames = Arr::join($committees->name,",");
-            $committees = $info->committee()->get()->all();
-
+            $committees = $info->committees->each(function ($c) { return $c->infos; } )->all(); #my committees & members
+            $skills=$info->skills->each(function ($item) { return $item->committees;} )->all(); #my skills & committee
             return view('profile',array(
                 'info' => $info,
+                'skills' => $skills,
                 'committees' => $committees
             ));
         }

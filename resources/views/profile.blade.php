@@ -21,13 +21,25 @@
                             <div class="row">
                                 <div class="col-12">Relatienummer: {{ $info->relatienummer ?? '' }} </div></div><br>
                             <div class="row">
-                                <div class="col-4"><b>Commissies: </b></div></div>
-                                    @foreach($committees as $k => $c)
-                                    <div class="row">
-                                        <div class="offset-1 col-8">{{ $c->name ?? '' }} </div>
+                                <div class="col-4"><b>Commissies: </b></div>
+                            </div>
+                            @foreach($committees as $k => $c)
+                                <div class="row">
+                                    <div class="offset-1 col-8"><a class="" href="mailto:{{ $c->name ?? '' }}">{{ $c->name ?? '' }} </a>
                                     </div>
-                                @endforeach
-                                <br>
+                                </div>
+                            @endforeach
+                            <br>
+                            <div class="row">
+                                <div class="col-4"><b>Skills: </b></div>
+                            </div>
+                            @foreach($skills as $s => $skillinfo)
+                                <div class="row">
+                                    <div class="offset-1 col-8">{{ $skillinfo->name ?? '' }}  @if($skillinfo->committee->name) (<a class="" href="mailto:{{ $skillinfo->committee->name ?? '' }}">{{ $skillinfo->committee->name ?? '' }})</a> @endif
+                                    </div>
+                                </div>
+                            @endforeach
+                            <br>
 							<div class="row">
                                 <div class="col-12"><b>Voorkeuren</b></div></div>
                             <div class="row">

@@ -19,6 +19,7 @@ use App\Models\User;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Database\Eloquent\Factories\Sequence;
 
 class DatabaseSeeder extends Seeder
 {
@@ -98,44 +99,54 @@ class DatabaseSeeder extends Seeder
         $Committees = Committee::factory()
             ->count(15)
             ->create();
-            $this->command->info('- Creating 5 Locations');
-            $Events = Location::factory()
+        $this->command->info('- Creating 5 Locations');
+        $Events = Location::factory()
             ->count(5)
             ->create();
 
-            $this->command->info('- Creating 30 Events');
-            $Events = Event::factory()
+        $this->command->info('- Creating 30 Events');
+        $Events = Event::factory()
             ->count(30)
             ->create();
 
-            $this->command->info('- Creating ' . $this->AmountTotalUsers . ' Info (of users) and corresponding users');
-            $Infos = Info::factory()
+        $this->command->info('- Creating 20 Skills');
+        #for($i=0; $i<20 ; $i++) {
+        $Skills = Skill::factory()
+            ->count(20)
+            ->state(new Sequence(
+                fn ($sequence) => ['committee_id' => Committee::all()->random()],
+            ))
+            ->create();
+            #->for($Committees->random())
+
+        #}
+
+        $this->command->info('- Creating ' . $this->AmountTotalUsers . ' Info (of users) and corresponding users');
+        $Infos = Info::factory()
             ->count($this->AmountTotalUsers)
             ->create();
 
-            $this->command->info('- Removing ' .$this->RemoveUserPercentage. ' % of all users (like they never logged in), so we keep:'.((1-($this->RemoveUserPercentage/100)) * $this->AmountTotalUsers));
-            $removeInfos=$Infos->random(($Infos->count()/100)*$this->RemoveUserPercentage)->each(function ($infoItem){
+        $this->command->info('- Removing ' .$this->RemoveUserPercentage. ' % of all users (like they never logged in), so we keep:'.((1-($this->RemoveUserPercentage/100)) * $this->AmountTotalUsers));
+        $removeInfos=$Infos->random(($Infos->count()/100)*$this->RemoveUserPercentage)->each(function ($infoItem){
                 $userid=$infoItem->user->id;
                 $infoItem->update(['user_id' => NULL]); #this way we keep Info model but dont have a User model attached to it.
                 User::destroy($userid);
             });
 
 
-            $userInfoList = $Infos->whereNotNull('user_id');
+        $userInfoList = $Infos->whereNotNull('user_id');
 
-            $this->command->info('- Attach (some) users to committees');
-            foreach ($userInfoList as $user) {
-                for($j=0;$j<Arr::random([0,1,2,3]);$j++){
-                    $user->committee()->attach($Committees->random()); #add each (active) user to 0-3 committees
-                }
+        $this->command->info('- Attach (some) users to committees');
+        $this->command->info('- Give (some) users skills');
+        foreach ($userInfoList as $user) {
+            for($j=0;$j<Arr::random([0,1,2,3]);$j++){
+                $user->committees()->attach($Committees->random()); #add each (active) user to 0-3 committees
             }
-
-        $this->command->info('- Creating 20 Skills');
-        for($i=0; $i<20 ; $i++) {
-            $Skills = Skill::factory()
-                ->for($Committees->random())
-                ->create();
+            for($k=0;$k<Arr::random([0,1,2,3]);$k++){
+                $user->skills()->attach($Skills->random()); #add each (active) user to 0-3 committees
+            }
         }
+
 
         $this->command->info('- Creating ' . $this->AmountShiftTypes . ' ShiftTypes');
         for($i=0; $i<$this->AmountShiftTypes; $i++) {
