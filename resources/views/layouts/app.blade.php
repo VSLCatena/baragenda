@@ -36,7 +36,7 @@
 
         <!-- Styles -->
         @section('styles')
-    <link href="{{ asset('css/tempus-dominus.min.css') }}" rel="stylesheet">
+    {{-- <link href="{{ asset('css/tempus-dominus.min.css') }}" rel="stylesheet"> --}}
     <link href="{{ asset('css/bootstrap-toggle.min.css') }}" rel="stylesheet">
 
 
