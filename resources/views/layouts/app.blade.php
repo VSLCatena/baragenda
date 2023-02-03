@@ -17,19 +17,23 @@
     @section('scripts')
     <!-- Scripts -->
     @vite(['resources/js/app.js'])
-    <script src="{{ asset('js/jquery.min.js') }}"></script>
+    <script src="{{ asset('js/jquery.min.js') }}"></script>  {{--  required for bootstrap-toggle --}}
     {{-- <script src="{{ asset('js/popper.min.js') }}"></script> --}}
-    <script src="{{ asset('js/moment-with-locales.min.js') }}"></script>
-    <script src="{{ asset('js/moment-timezone.js') }}"></script>
+    {{-- <script src="{{ asset('js/moment-with-locales.min.js') }}"></script>
+    <script src="{{ asset('js/moment-timezone.js') }}"></script> --}}
 
     {{-- <script src="{{ asset('js/tempus-dominus.min.js') }}"></script> --}}
     <script src="{{ asset('js/bootstrap-toggle.min.js') }}"></script>
+     {{-- https://www.cdnpkg.com/bootstrap-toggle --}}
 
+    {{-- Enable tooltips everywhere --}}
     <script>
-        var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
-        var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
-            return new bootstrap.Tooltip(tooltipTriggerEl)
-        })
+        window.addEventListener('load', (event) => {
+            var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+            var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+                return new bootstrap.Tooltip(tooltipTriggerEl)
+            })
+        });
     </script>
 
         @show

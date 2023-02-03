@@ -1,7 +1,24 @@
 import _ from 'lodash';
 window._ = _;
 
+import $ from 'jquery';
+window.$ = $;
+
+import * as Popper from '@popperjs/core'
+window.Popper = Popper
+
+
+import '@eonasdan/tempus-dominus/dist/css/tempus-dominus.css';
+import { library, dom } from '@fortawesome/fontawesome-svg-core';
+import { fas } from '@fortawesome/free-solid-svg-icons';
+library.add(fas);
+dom.watch();
+
+import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap';
+
+import { TempusDominus, version } from '@eonasdan/tempus-dominus';
+window.TempusDominus = TempusDominus
 
 /**
  * We'll load the axios HTTP library which allows us to easily issue requests

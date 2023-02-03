@@ -18,7 +18,7 @@ $(document).on("dblclick", "#content", function(){
     var current = $(this).text();
     $("#content").html('<textarea class="form-control" id="newcont" rows="5">'+current+'</textarea>');
     $("#newcont").focus();
-    
+
     $("#newcont").focus(function() {
         console.log('in');
     }).blur(function() {
@@ -28,7 +28,8 @@ $(document).on("dblclick", "#content", function(){
 
 })
 
-$('[data-toggle="tooltip"]').tooltip(); 
+const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
+const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
 
 //not working yet
 function scrollTo(perc){
