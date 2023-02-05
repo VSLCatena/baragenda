@@ -7,7 +7,7 @@
                 <div class="card">
                     <div class="card-header">Profielinstellingen</div>
 
-                    <div class="card-block">
+                    <div class="card-body">
                         <form class="form-horizontal col-md-8 col-xs-12" method="POST">
                             {{ csrf_field() }}
                             <br>
@@ -20,18 +20,20 @@
                                 <div class="col-12">Lidnummer: {{ $info->lidnummer ?? '' }} </div></div>
                             <div class="row">
                                 <div class="col-12">Relatienummer: {{ $info->relatienummer ?? '' }} </div></div><br>
-                            <div class="row">
-                                <div class="col-5"><b>Commissies: </b></div>
-                            </div>
-                            @foreach($committees as $k => $c)
+                            @if($committees)
                                 <div class="row">
-                                    <div class="offset-1 col-8"  data-bs-toggle="tooltip" data-bs-html="true" data-bs-placement="right" title="@foreach($c->infos as $u=>$i)<i>{{$i->name}}</i><br/>@endforeach" >
-                                        <a class="" href="mailto:{{ $c->name ?? '' }}">{{ $c->name ?? '' }}
-                                        </a>
-                                    </div>
+                                    <div class="col-5"><b>Commissies: </b></div>
                                 </div>
-                            @endforeach
-                            <br>
+                                @foreach($committees as $k => $c)
+                                    <div class="row">
+                                        <div class="offset-1 col-8"   >
+                                            <a class="" href="mailto:{{ $c->name ?? '' }}" data-bs-toggle="tooltip" data-bs-html="true" data-bs-placement="right" title="@foreach($c->infos as $u=>$i)<i>{{$i->name}}</i><br/>@endforeach" >{{ $c->name ?? '' }}
+                                            </a>
+                                        </div>
+                                    </div>
+                                @endforeach
+                                <br>
+                            @endif
                             <div class="row">
                                 <div class="col-4"><b>Skills: </b></div>
                             </div>
