@@ -28,9 +28,6 @@ $(document).on("dblclick", "#content", function(){
 
 })
 
-const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
-const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
-
 //not working yet
 function scrollTo(perc){
 	window.scrollTo(0,document.querySelector(".grid-bottom-tabs").scrollHeight);
