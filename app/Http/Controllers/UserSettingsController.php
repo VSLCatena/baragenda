@@ -18,10 +18,9 @@ class UserSettingsController extends Controller
 {
     public function __construct() {
         $this->middleware('auth');
-        $this->middleware('privilege');
     }
     //when page is opeened
-    public function changeSettings(Request $request,$arr=5 ){
+    public function changeSettings(Request $request ){
         if(Auth::user()->service_user){
             return redirect(route('home'));
         }
