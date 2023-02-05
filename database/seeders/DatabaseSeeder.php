@@ -73,7 +73,24 @@ class DatabaseSeeder extends Seeder
                 'admin' => 0
             ]);
 
-
+        if(env('APP_DEBUG_USERNAME')){
+            DB::table('users')->updateOrInsert(
+                ['id' => '11'],
+                ['username' => env('APP_DEBUG_USERNAME')
+            ]);
+            DB::table('infos')->updateOrInsert(
+                ['objectGUID' => '123123123', 'user_id' => 11],
+                [
+                    'user_id' => 11,
+                    'objectGUID' => '123123123',
+                    'lidnummer' => '12-315',
+                    'relatienummer' => '32018505065',
+                    'firstname' => env('APP_DEBUG_USERNAME'),
+                    'name' => env('APP_DEBUG_USERNAME'),
+                    'email' => '',
+                    'admin' => 1
+                ]);
+            }
         DB::table('committees')->updateOrInsert([
             'name' => 'barco',
             'objectGUID' => '46541144'
@@ -143,8 +160,15 @@ class DatabaseSeeder extends Seeder
                 $user->committees()->attach($Committees->random()); #add each (active) user to 0-3 committees
             }
             for($k=0;$k<Arr::random([0,1,2,3]);$k++){
-                $user->skills()->attach($Skills->random()); #add each (active) user to 0-3 committees
+                $user->skills()->attach($Skills->random()); #add each (active) user to 0-3 skilss
             }
+        }
+        if(env('APP_DEBUG_USERNAME')){
+            $this->command->info('- Add two committees & two skills to testuser');
+            Info::find(2)->skills()->attach($Skills->random()); #add each (active) user to skills
+            Info::find(2)->skills()->attach($Skills->random()); #add each (active) user to skills
+            Info::find(2)->committees()->attach($Committees->random()); #add each (active) user to committees
+            Info::find(2)->committees()->attach($Committees->random()); #add each (active) user to committees
         }
 
 
