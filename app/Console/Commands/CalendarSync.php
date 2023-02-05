@@ -37,7 +37,7 @@ class CalendarSync extends Command
         parent::__construct();
         $config = config('baragenda');
         $this->google = $config['google'];
-        $this->googleUser = Info::where('name', 'GoogleSync')->first()->user->id ?? null;
+        $this->googleUser = null;
     }
 
     /**
@@ -53,6 +53,7 @@ class CalendarSync extends Command
             ## Sync using ID and update timestamp
             ##
 
+            $this->googleUser = Info::where('name', 'GoogleSync')->first()->user->id ?? null;
             #get local $array1 = array("green", "red", "blue");
             $events_local = LEvent::whereBetween('datetime_start', [Carbon::today()->startOfDay()->addMonths(-1), Carbon::today()->addMonths(1)])->get();
             if(!($events_local->isEmpty())){
