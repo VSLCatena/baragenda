@@ -15,9 +15,9 @@ library.add(fas);
 dom.watch();
 
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { Alert, Button, Collapse, Tooltip, Popover } from 'bootstrap'
+import { Alert, Button, Collapse, Tooltip, Popover, Modal } from 'bootstrap'
 window.bootstrap = {
-    Alert, Button, Collapse, Tooltip, Popover
+    Alert, Button, Collapse, Tooltip, Popover, Modal
 }
 
 import { TempusDominus, version } from '@eonasdan/tempus-dominus';
