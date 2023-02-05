@@ -64,7 +64,7 @@
                                     <div class="row">
                                         <div class="col-12">
                                             <div style="overflow:hidden; padding-left:15px; padding-right:15px; ">
-                                                <div class="form-group">
+                                                <div >
                                                     <div class="row">
                                                         <div class="col-md-12">
                                                             <div class="col-sm-12" id="htmlTarget">
@@ -360,15 +360,12 @@
                                                         </div>
                                                     </div>
                                                     <!-- Modal -->
-                                                    <div id="myModal" class="modal fade" role="dialog"
-                                                        tabindex="-1">
+                                                    <div id="myModal" class="modal fade" tabindex="-1">
                                                         <div class="modal-dialog">
                                                             <div class="modal-content">
                                                                 <div class="modal-header">
                                                                     <h5 class="modal-title">Modal title</h5>
-                                                                    <button type="button" class="btn-close"
-                                                                        data-bs-dismiss="modal"
-                                                                        aria-label="Close"></button>
+                                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                                                 </div>
                                                                 <!-- Modal content-->
                                                                 <div class="modal-body"
@@ -379,7 +376,7 @@
                                                                     <div class="row">
                                                                         <div class="col-12">
                                                                             <div class="row min-height40">
-                                                                                <div class="col-1" data-toggle="tooltip"
+                                                                                <div class="col-1" data-bs-toggle="tooltip"
                                                                                     title="Summary">
                                                                                     <i class="fas fa-circle"></i>
                                                                                 </div>
@@ -388,7 +385,7 @@
                                                                                 </div>
                                                                             </div>
                                                                             <div class="row min-height40">
-                                                                                <div class="col-1" data-toggle="tooltip"
+                                                                                <div class="col-1" data-bs-toggle="tooltip"
                                                                                     title="Location">
                                                                                     <i class="fas fa-city"></i>
                                                                                 </div>
@@ -397,7 +394,7 @@
                                                                                 </div>
                                                                             </div>
                                                                             <div class="row min-height40">
-                                                                                <div class="col-1" data-toggle="tooltip"
+                                                                                <div class="col-1" data-bs-toggle="tooltip"
                                                                                     title="Room">
                                                                                     <i class="fas fa-door-open"></i>
                                                                                 </div>
@@ -406,7 +403,7 @@
                                                                                 </div>
                                                                             </div>
                                                                             <div class="row min-height40">
-                                                                                <div class="col-1" data-toggle="tooltip"
+                                                                                <div class="col-1" data-bs-toggle="tooltip"
                                                                                     title="Attendees">
                                                                                     <i class="fas fa-users"></i>
                                                                                 </div>
@@ -415,7 +412,7 @@
                                                                                 </div>
                                                                             </div>
                                                                             <div class="row min-height40">
-                                                                                <div class="col-1" data-toggle="tooltip"
+                                                                                <div class="col-1" data-bs-toggle="tooltip"
                                                                                     title="Description">
                                                                                     <i class="fas fa-info-circle"></i>
                                                                                 </div>
@@ -424,7 +421,7 @@
                                                                                 </div>
                                                                             </div>
                                                                             <div class="row min-height40">
-                                                                                <div class="col-1" data-toggle="tooltip"
+                                                                                <div class="col-1" data-bs-toggle="tooltip"
                                                                                     title="Meet Link">
                                                                                     <i class="fas fa-briefcase"></i>
                                                                                 </div>
@@ -433,7 +430,7 @@
                                                                                 </div>
                                                                             </div>
                                                                             <div class="row min-height40">
-                                                                                <div class="col-1" data-toggle="tooltip"
+                                                                                <div class="col-1" data-bs-toggle="tooltip"
                                                                                     title="Calendar">
                                                                                     <i class="fas fa-calendar-day"></i>
                                                                                 </div>
@@ -458,7 +455,7 @@
                                                                             class="btn btn-default">Aanpassen</button>
                                                                     </form>
                                                                     {{-- @endadmin --}}
-                                                                    <button type="button" class="btn btn-default"
+                                                                    <button type="button" class="btn btn-close"
                                                                         data-dismiss="modal">Close</button>
                                                                 </div>
                                                             </div>
@@ -532,7 +529,7 @@
                         $('#md_meet').text(event.entrypoints);
                         $('#md_calendar').text(event.calendar);
 
-                        $("#myModal").modal()
+                        $('#myModal').show()
                     })
             } catch (err) {
                 console.log("error " + err)
