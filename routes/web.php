@@ -74,4 +74,4 @@ Route::get('/shiftmanagement/page/{page}', [ShiftAdminController::class, 'admin'
 Route::post('/shiftmanagement/page/{page}', [ShiftAdminController::class, 'admin'])->name('shifts.admin.page');
 
 //skills
-Route::get('/skills', [SkillController::class, 'index']);
+Route::get('/skills', [SkillController::class, 'index'])->name('skills.admin');
