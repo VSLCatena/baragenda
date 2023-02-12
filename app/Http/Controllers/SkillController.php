@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 
 use Illuminate\Support\Facades\Auth;
 use App\Models\Skill;
+use App\Models\Info;
 
 class SkillController extends Controller
 {
@@ -20,6 +21,8 @@ class SkillController extends Controller
         //TODO: zoek uit hoe je alle commissies opvraagt
         $skills = Skill::all();
 
+        $infos = Info::where('id', '>=', 100)->with('skills')->get();
+
         //All Self-Skills
         $selfSkills=Auth::user()->info->skills->each(function ($item) { return $item;} )->all();
         // $skills=$info->skills->each(function ($item) { return $item->committees;} )->all(); #my skills & committee
@@ -31,7 +34,8 @@ class SkillController extends Controller
 
         return view('skills', compact('skills'),array(
 			'selfSkills'=>$selfSkills,
-            'selfCommitteeSkills'=>$selfCommitteeSkills
+            'selfCommitteeSkills'=>$selfCommitteeSkills,
+            'infos'=>$infos
 			));
     }
 }
