@@ -92,7 +92,7 @@ class ShiftAdminController extends ShiftController
 					$shifttypes=ShiftType::Where($whereMatch)->get();
 
 					//show requested date & events
-					$shifts = Shift::withTrashed()->whereBetween('datetime',array($now_r_start,$now_r1_end))->with('shifttype','shiftuser.info')->get(); // get all shifts, even delete ones
+					$shifts = Shift::withTrashed()->whereBetween('datetime',array($now_r_start,$now_r1_end))->with('shifttype','shiftuser')->get(); // get all shifts, even delete ones
 					#echo('<pre>');print_r($shifts);echo('</pre>');die;;
 					//create array of dates -> arr[2020-02-14][carbon]=CarbonObj
 					$arr=array();

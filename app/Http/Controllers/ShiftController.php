@@ -52,7 +52,8 @@ class ShiftController extends Controller
                 $shifttypes=ShiftType::Where($whereMatch)->get();
 
                 //show requested date & events
-                $shifts = Shift::whereBetween('datetime',array($now_r_start,$now_r2_end))->with('shifttype','shiftuser.info')->get();
+                $shifts = Shift::whereBetween('datetime',array($now_r_start,$now_r2_end))->with('shifttype','shiftuser')->get();
+                //$shifts = Shift::whereBetween('datetime',array($now_r_start,$now_r2_end))->with('shifttype','shiftuser')->with('info')->get();
 
 				//create array of dates -> arr[2020-02-14][carbon]=CarbonObj
 				$data=array();

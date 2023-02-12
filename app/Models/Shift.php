@@ -23,11 +23,6 @@ class Shift extends Model
 		return $this->belongsTo('App\Models\ShiftType','shift_type_id');
     }
     public function shiftuser(){
-         //shift->shift_user->user->info
-        #SELECT * FROM `shifts`
-        #INNER JOIN shift_user ON shifts.id=shift_user.shift_id
-        #INNER JOIN users ON shift_user.user_id=users.id
-        #INNER JOIN infos ON infos.user_id=users.id;
 		return $this->belongsToMany(Info::class,'info_shift');
     }
 

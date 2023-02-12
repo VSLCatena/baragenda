@@ -37,4 +37,8 @@ class Info extends Model
     {
         return $this->belongsToMany(Skill::class, 'info_skill', 'info_id', 'skill_id');
     }
+    public function shiftuser()
+    {
+        return $this->belongsToMany(Shift::class,'info_shift');
+    }
 }
