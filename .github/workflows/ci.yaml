@@ -46,7 +46,7 @@ jobs:
         npm run build
     - name: Seed db
       run: |
-        artisan migrate
-        artisan db:seed
+        php artisan migrate
+        php artisan db:seed
     - name: Run Testsuite
       run: vendor/bin/phpunit tests/
