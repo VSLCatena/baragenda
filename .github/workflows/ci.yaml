@@ -36,7 +36,7 @@ jobs:
         composer install --no-scripts
     - name: Prepare Laravel Application
       run: |
-        cp .env.example .env
+        cp .env.ci.example .env
         php artisan key:generate
     - name: Install front-end dependencies
       run: |
