@@ -38,6 +38,7 @@ jobs:
       run: |
         cp .env.ci.example .env
         php artisan key:generate
+        php artisan ui bootstrap
     - name: Install front-end dependencies
       run: |
         npm install
