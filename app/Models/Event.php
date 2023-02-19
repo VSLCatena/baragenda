@@ -14,17 +14,17 @@ class Event extends Model
      *
      * @var array
      */
-    protected $dates = [
-        'datetime_start',
-        'datetime_end',
-        'date_start',
-        'date_end',
-        'recurring_start',
-        'recurring_end',
-        'google_updated',
-        'google_created',
-        'updated_at',
-        'deleted_at'
+    protected $casts = [
+        'datetime_start' => 'datetime',
+        'datetime_end' => 'datetime',
+        'date_start' => 'datetime',
+        'date_end' => 'datetime',
+        'recurring_start' => 'datetime',
+        'recurring_end' => 'datetime',
+        'google_updated' => 'datetime',
+        'google_created' => 'datetime',
+        'updated_at' => 'datetime',
+        'deleted_at' => 'datetime'
     ];
 	/**
      * The attributes that are mass assignable.
